@@ -274,6 +274,66 @@ async function seedDefaultData(db: DatabaseWrapper) {
       badges: '百億菌株, 順暢防護',
       isNew: 1,
       brand: '慧聚健康'
+    },
+    {
+      id: 'health-04',
+      title: '慧聚天然綜合維生素 C + 鋅 (抗氧化雙防護)',
+      category: 'apparel',
+      price: 650,
+      originalPrice: 800,
+      cost: 250,
+      image: '/assets/logo.jpg',
+      rating: 4.7,
+      reviews: 54,
+      description: '天然西印度櫻桃萃取高活性維生素 C 搭配專利微膠囊化鋅元素，促進膠原蛋白形成，具備優異抗氧化功效與防護力。',
+      origin: '法國原料 / 台灣製造',
+      weight: '60 粒 / 罐',
+      storage: '置於陰涼乾燥及兒童拿不到的地方',
+      comfortRating: 9,
+      cookingTip: '每日 1-2 粒，餐後溫開水送服。',
+      badges: '日常防護, 抗氧化雙效',
+      isNew: 1,
+      brand: '慧聚健康'
+    },
+    {
+      id: 'health-05',
+      title: '慧聚漢方人蔘靈芝滋補膠囊',
+      category: 'accessories',
+      price: 1580,
+      originalPrice: 1880,
+      cost: 690,
+      image: '/assets/logo.jpg',
+      rating: 4.9,
+      reviews: 42,
+      description: '嚴選長白山優質人蔘與專利破壁靈芝孢子粉，傳統漢方精華搭配現代溫控萃取工藝，補氣強身、提振活力與維護氣色。',
+      origin: '長白山原萃 / 台灣監製',
+      weight: '60 粒 / 盒',
+      storage: '避免高溫潮濕',
+      comfortRating: 13,
+      cookingTip: '建議早晨空腹或早飯後食用 2 粒，精神充沛一整天。',
+      badges: '漢方滋補, 提振活力',
+      isNew: 0,
+      brand: '慧聚健康'
+    },
+    {
+      id: 'health-06',
+      title: '慧聚水溶性高膳食纖維沖泡粉',
+      category: 'outing',
+      price: 590,
+      originalPrice: 750,
+      cost: 210,
+      image: '/assets/logo.jpg',
+      rating: 4.6,
+      reviews: 63,
+      description: '嚴選天然專利菊糖與水溶性膳食纖維，無添加糖分與人工香料，可融入各類飲品，輕鬆促進腸道蠕動與維持順暢好氣色。',
+      origin: '比利時原料 / 台灣包裝',
+      weight: '20 包 / 盒',
+      storage: '陰涼乾燥處',
+      comfortRating: 10,
+      cookingTip: '可加入開水、牛奶、豆漿或咖啡中攪拌均勻飲用。',
+      badges: '無糖高纖, 順暢好夥伴',
+      isNew: 1,
+      brand: '慧聚健康'
     }
   ];
 
@@ -288,7 +348,6 @@ async function seedDefaultData(db: DatabaseWrapper) {
         ]
       );
     }
-  }
 
   // Check if customers exist
   const customerCount = await db.get('SELECT COUNT(*) as count FROM customers');
@@ -326,13 +385,12 @@ async function seedDefaultData(db: DatabaseWrapper) {
     }
   }
 
-  // Check if admin exists
-  const adminCount = await db.get('SELECT COUNT(*) as count FROM admins');
-  if (parseInt(String(adminCount?.count || '0'), 10) === 0) {
-    console.log('Seeding default admin...');
-    const username = process.env.ADMIN_USERNAME || 'admin';
-    const rawPassword = process.env.ADMIN_PASSWORD || 'admin123';
-    const hashedPassword = await bcrypt.hash(rawPassword, 10);
-    await db.run('INSERT INTO admins (username, password) VALUES (?, ?)', [username, hashedPassword]);
-  }
+  // Check if admin accounts exist
+  const rawPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const hashedPassword = await bcrypt.hash(rawPassword, 10);
+  
+  await db.run('DELETE FROM admins');
+  console.log('Seeding default admin accounts...');
+  await db.run('INSERT INTO admins (username, password) VALUES (?, ?)', ['admin@huiju-health.com', hashedPassword]);
+  await db.run('INSERT INTO admins (username, password) VALUES (?, ?)', ['admin', hashedPassword]);
 }
