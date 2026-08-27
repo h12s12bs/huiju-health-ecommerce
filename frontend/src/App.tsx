@@ -119,54 +119,52 @@ function App() {
   const [customers, setCustomers] = useState<Customer[]>([]);
 
   // CUSTOM WEB CONFIGS (LOADED FROM system_config DB)
-  const [announcementText, setAnnouncementText] = useState('🌿 慧聚健康 - 帶給每個家庭全方位健康與專業照顧的綜合平台 🌿');
-  const [heroTitle, setHeroTitle] = useState('慧聚健康\n帶給每個家庭全方位的健康與照顧');
-  const [heroDesc, setHeroDesc] = useState('以專業、創新與關懷為核心。我們致力於提供全方位健康照護方案、預防保健與優質生活體驗。');
+  const [announcementText, setAnnouncementText] = useState('🌿 慧聚健康 - 全館消費滿 NT$2000 即享免運！新會員註冊即贈 $100 體驗折價券 🚚');
+  const [heroTitle, setHeroTitle] = useState('慧聚健康\n專注品質與科學驗證的保健品牌');
+  const [heroDesc, setHeroDesc] = useState('以嚴謹研發與國際專利原料為核心。為您與全家提供安心、純淨的高品質保健食品。');
   const [heroImage, setHeroImage] = useState('');
   const [heroSlides, setHeroSlides] = useState<Array<{ id: string; title: string; desc: string; img: string; btnText: string }>>([
     {
       id: 'slide-1',
-      title: '慧聚健康\n帶給每個家庭全方位的健康與照顧',
-      desc: '以專業、創新與關懷為核心。我們致力於提供全方位健康照護方案、預防保健與優質生活體驗。',
+      title: '慧聚健康\n專注品質與科學驗證的保健品牌',
+      desc: '以嚴謹研發與國際專利原料為核心。為您與全家提供安心、純淨的高品質保健食品。',
       img: '',
-      btnText: '探索慧聚健康'
+      btnText: '瀏覽熱銷保健食品'
     },
     {
       id: 'slide-2',
-      title: '全方位健康管理與諮詢服務\n打造專屬您的健康生活藍圖',
-      desc: '整合預防保健、健康諮詢與品質生活方案，陪伴您與家人邁向更健康美好的每一天。',
+      title: '天然純淨與專利認證\n守護全家人的日常健康',
+      desc: '嚴選國際認證原料，全流程品質把關與安心配送，給您最可靠的保健選擇。',
       img: '',
-      btnText: '了解健康服務'
+      btnText: '探索保健產品'
     },
     {
       id: 'slide-3',
-      title: '嚴選品質與科學驗證\n帶給每個家庭安心與健康',
-      desc: '從日常健康維護到未來智慧健康照護，慧聚健康為您把關每一個細節。',
+      title: '輕鬆瀏覽與安心購物\n享滿額免運與優質體驗',
+      desc: '全館消費滿 NT$2000 即享免運優惠，線上快速下單，輕鬆送到家。',
       img: '',
-      btnText: '探索全站服務'
+      btnText: '立即選購'
     }
   ]);
   const [blogArticles, setBlogArticles] = useState<any[]>(DEFAULT_RECIPES);
   const [customCategories, setCustomCategories] = useState<Array<{ id: string; name: string }>>([
-    { id: 'apparel', name: '預防保健' },
-    { id: 'accessories', name: '健康諮詢' },
-    { id: 'outing', name: '智慧照護' },
-    { id: 'toys', name: '品質生活' }
+    { id: 'apparel', name: '核心保健' },
+    { id: 'accessories', name: '草本養生' },
+    { id: 'outing', name: '順暢消化' },
+    { id: 'toys', name: '晶亮防護' }
   ]);
   const [customBrands, setCustomBrands] = useState<Array<{ id: string; name: string }>>([
-    { id: 'brand-huiju-health', name: '慧聚健康平台 (Huiju Health)' },
-    { id: 'brand-huiju-care', name: '慧聚諮詢與照護 (Huiju Care)' },
-    { id: 'brand-huiju-lab', name: '慧聚研發學院 (Huiju Academy)' }
+    { id: 'brand-huiju-health', name: '慧聚健康 (Huiju Health)' }
   ]);
   const [navItems, setNavItems] = useState<Array<{ id: string; name: string; category?: string; page?: string }>>([
     { id: 'nav-new', name: '熱銷推薦', category: 'new', page: 'shop' },
-    { id: 'nav-apparel', name: '預防保健', category: 'apparel', page: 'shop' },
-    { id: 'nav-accessories', name: '健康諮詢', category: 'accessories', page: 'shop' },
-    { id: 'nav-outing', name: '智慧照護', category: 'outing', page: 'shop' },
-    { id: 'nav-brands', name: '服務與品牌', page: 'brands' },
+    { id: 'nav-apparel', name: '核心保健', category: 'apparel', page: 'shop' },
+    { id: 'nav-accessories', name: '草本養生', category: 'accessories', page: 'shop' },
+    { id: 'nav-outing', name: '順暢消化', category: 'outing', page: 'shop' },
+    { id: 'nav-brands', name: '品牌專區', page: 'brands' },
     { id: 'nav-blog', name: '健康專欄', page: 'blog' }
   ]);
-  const [bannerBtnText, setBannerBtnText] = useState('探索慧聚健康全系列');
+  const [bannerBtnText, setBannerBtnText] = useState('瀏覽熱銷保健食品');
   const [layoutOrder, setLayoutOrder] = useState<string[]>(['banner', 'products', 'instagram']);
   const [instagramUrl, setInstagramUrl] = useState('https://instagram.com');
   const [lineUrl, setLineUrl] = useState('https://line.me');

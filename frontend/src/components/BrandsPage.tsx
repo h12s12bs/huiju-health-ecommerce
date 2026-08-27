@@ -24,32 +24,18 @@ export const BrandsPage: React.FC<BrandsPageProps> = ({
           <span className="section-subtitle">Huiju Health Brands</span>
           <h2 className="section-title">慧聚健康品牌專區</h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginTop: '0.5rem' }}>
-            專注於全方位健康生活與照護服務，為您與全家提供預防保健、專業諮詢與品質生活方案。
+            專注於高品質保健食品研發與品質驗證，為您與全家提供安心純淨的日常保健商品。
           </p>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
           {[
             {
-              name: '慧聚健康平台 (Huiju Health)',
-              desc: '整合全家預防保健方案與質感健康生活選品。以科學驗證與品質第一為原則，陪伴全家建立優質健康生活習慣。',
-              tag: '預防保健 / 全家照顧',
+              name: '慧聚健康 (Huiju Health)',
+              desc: '專注於高品質保健食品研發與國際專利認證原料。以科學數據與品質第一為核心，為全家人提供安心、純淨的日常保健照顧。',
+              tag: '品質保證 / 專利認證原料',
               img: petHero,
               brandKey: 'Huiju Health'
-            },
-            {
-              name: '慧聚諮詢與照護 (Huiju Care)',
-              desc: '提供專業線上 1-on-1 健康諮詢服務、客製化健康規劃與智慧照顧數據追蹤。陪伴您打造最適合自己的健康生活藍圖。',
-              tag: '專業諮詢 / 智慧照顧',
-              img: dogBed,
-              brandKey: 'Huiju Care'
-            },
-            {
-              name: '慧聚研發學院 (Huiju Academy)',
-              desc: '專注於未來健康趨勢研究與衛教推廣。定期分享全方位養生保健、日常防護與靈活活力保養知識。',
-              tag: '健康衛教 / 未來趨勢',
-              img: petFood,
-              brandKey: 'Huiju Academy'
             }
           ].map((brand, idx) => (
             <div 

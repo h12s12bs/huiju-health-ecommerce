@@ -213,11 +213,11 @@ async function initTables(db: DatabaseWrapper) {
 async function seedDefaultData(db: DatabaseWrapper) {
   // Check if products exist or replace default products
   await db.run('DELETE FROM products WHERE id LIKE ? OR id LIKE ?', ['health-%', 'pet-%']);
-  console.log('Seeding default health platform services and products...');
+  console.log('Seeding default health supplement e-commerce products...');
   const defaultProducts = [
     {
       id: 'health-01',
-      title: '[預防保健] 慧聚全方位健康守護方案',
+      title: '慧聚高純度深海魚油 (rTG 型 85% 高濃度)',
       category: 'apparel',
       price: 1280,
       originalPrice: 1500,
@@ -225,55 +225,55 @@ async function seedDefaultData(db: DatabaseWrapper) {
       image: '/assets/logo.jpg',
       rating: 4.9,
       reviews: 96,
-      description: '結合日常健康維護、基礎營養規劃與家庭照護檢測指南，為您與家人建立全方位的健康防護。',
-      origin: '慧聚健康團隊企劃',
-      weight: '全家健康管理專案',
-      storage: '線上與實體全方位服務',
+      description: '嚴選挪威乾淨海域小魚提取，rTG 型高吸收率，專利魚油軟膠囊，無腥味、高濃度 EPA/DHA，維持心血管與思路敏捷。',
+      origin: '挪威原料 / 台灣生產',
+      weight: '60 粒 / 盒 (30 天份)',
+      storage: '請置於陰涼乾燥處，避免陽光直射',
       comfortRating: 11,
-      cookingTip: '建議與專業健康顧問溝通後配合日常習慣執行。',
-      badges: '熱銷推薦, 專業評估',
+      cookingTip: '建議隨餐或餐後搭配溫開水食用，吸收效果最佳。',
+      badges: '熱銷推薦, 國際專利認證',
       isNew: 1,
-      brand: '慧聚健康平台'
+      brand: '慧聚健康'
     },
     {
       id: 'health-02',
-      title: '[健康諮詢] 專業團隊 1-on-1 客製化健康規劃服務',
-      category: 'accessories',
+      title: '慧聚游離型金盞花葉黃素膠囊 (黃金比例 10:2)',
+      category: 'toys',
       price: 980,
       originalPrice: 1200,
       cost: 420,
       image: '/assets/logo.jpg',
       rating: 4.8,
       reviews: 128,
-      description: '由專業營養與健康顧問提供深度 1 對 1 線上諮詢，為您量身打造專屬的健康作息與飲食建議藍圖。',
-      origin: '慧聚諮詢與照護團隊',
-      weight: '1 次深度諮詢 (60 分鐘)',
-      storage: '線上視訊或電話諮詢',
+      description: '專為現代螢幕族與上班族打造，結合 FloraGLO 游離型葉黃素與玉米黃素黃金比例 10:2，添加山桑子與黑大豆皮萃取物，全方位守護晶亮舒適。',
+      origin: '美國專利 / 台灣封裝',
+      weight: '30 粒 / 盒',
+      storage: '常溫陰涼處保存',
       comfortRating: 10,
-      cookingTip: '諮詢前請先整理近期作息與個人健康目標。',
-      badges: '1-on-1 諮詢, 客製規劃',
+      cookingTip: '每日 1 粒，飯後搭配溫開水食用。',
+      badges: '晶亮防護, 專利 FloraGLO',
       isNew: 0,
-      brand: '慧聚諮詢與照護'
+      brand: '慧聚健康'
     },
     {
       id: 'health-03',
-      title: '[智慧照護] 智慧健康數據監測與全家照顧服務',
+      title: '慧聚專利百億複合益生菌顆粒',
       category: 'outing',
-      price: 1680,
-      originalPrice: 2000,
-      cost: 680,
+      price: 880,
+      originalPrice: 1100,
+      cost: 380,
       image: '/assets/logo.jpg',
       rating: 5.0,
       reviews: 75,
-      description: '整合智慧裝置數據趨勢追蹤與健康提醒，隨時掌握全家人的身體狀況與照護需求。',
-      origin: '慧聚智慧照護中心',
-      weight: '全家月度數據監測方案',
-      storage: '平台雲端數據管理',
+      description: '包埋技術維護包覆保護，嚴選 15 支高活性專利益生菌搭配水溶性膳食纖維與半乳寡糖，維持消化道機能，調節體質。',
+      origin: '台灣研發製造',
+      weight: '30 包 / 盒',
+      storage: '請勿放置於高溫車內或陽光直射處',
       comfortRating: 12,
-      cookingTip: '搭配智慧穿戴與健康 APP 獲得最佳體驗。',
-      badges: '智慧照護, 數據追蹤',
+      cookingTip: '每日 1-2 包，可直接入口或加入 40℃ 以下溫水果汁沖泡飲用。',
+      badges: '百億菌株, 順暢防護',
       isNew: 1,
-      brand: '慧聚諮詢與照護'
+      brand: '慧聚健康'
     }
   ];
 
