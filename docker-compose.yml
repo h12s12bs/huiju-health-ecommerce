@@ -1,26 +1,42 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: huiju_health_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: huiju_ecommerce
+    ports:
+      - "5433:5432"
+    volumes:
+      - huiju_pgdata:/var/lib/postgresql/data
+
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: lerou_custom_backend
+    container_name: huiju_health_backend
     restart: always
     ports:
-      - "5000:5000"
-    volumes:
-      - ./backend/data:/app/data
-    env_file:
-      - ./backend/.env
+      - "5001:5000"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgrespassword@postgres:5432/huiju_ecommerce
+    depends_on:
+      - postgres
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: lerou_custom_frontend
+    container_name: huiju_health_frontend
     restart: always
     ports:
-      - "80:80"
+      - "8081:80"
     depends_on:
       - backend
+
+volumes:
+  huiju_pgdata:

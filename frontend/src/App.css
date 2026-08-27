@@ -2120,4 +2120,27 @@ textarea.form-input {
   line-height: 1.6 !important;
 }
 
+/* CRM Search Input & Select Overrides */
+.search-input-with-icon {
+  padding-left: 38px !important;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+select.form-input {
+  padding: 0.5rem 2rem 0.5rem 0.75rem !important;
+  line-height: 1.4 !important;
+  min-height: 42px !important;
+  height: auto !important;
+  -webkit-appearance: menulist !important;
+  appearance: menulist !important;
+  overflow: visible !important;
+  text-overflow: ellipsis !important;
+}
+
+select.form-input option {
+  padding: 0.5rem 0.75rem !important;
+  line-height: 1.6 !important;
+  font-size: 0.95rem !important;
+}
 

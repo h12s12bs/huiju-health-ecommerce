@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
 router.post('/', authenticateAdmin, async (req: AuthenticatedRequest, res: Response) => {
   const {
     id, title, category, price, originalPrice, image, rating, reviews,
-    description, origin, weight, storage, comfortRating, cookingTip, badges, isNew, brand
+    description, origin, weight, storage, comfortRating, cookingTip, badges, isNew, brand, cost
   } = req.body;
 
   if (!title || !category || price === undefined || !image) {
@@ -45,14 +45,14 @@ router.post('/', authenticateAdmin, async (req: AuthenticatedRequest, res: Respo
     await db.run(
       `INSERT INTO products (
         id, title, category, price, originalPrice, image, rating, reviews,
-        description, origin, weight, storage, comfortRating, cookingTip, badges, isNew, brand
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        description, origin, weight, storage, comfortRating, cookingTip, badges, isNew, brand, cost
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         generatedId, title, category, Number(price), originalPrice ? Number(originalPrice) : null,
         image, rating ? Number(rating) : 5.0, reviews ? Number(reviews) : 0,
         description || '', origin || '', weight || '', storage || '',
         comfortRating ? Number(comfortRating) : null, cookingTip || '',
-        badgesStr, isNewInt, brand || ''
+        badgesStr, isNewInt, brand || '', cost ? Number(cost) : 0
       ]
     );
 
@@ -75,7 +75,7 @@ router.put('/:id', authenticateAdmin, async (req: AuthenticatedRequest, res: Res
   const { id } = req.params;
   const {
     title, category, price, originalPrice, image, rating, reviews,
-    description, origin, weight, storage, comfortRating, cookingTip, badges, isNew, brand
+    description, origin, weight, storage, comfortRating, cookingTip, badges, isNew, brand, cost
   } = req.body;
 
   if (!title || !category || price === undefined || !image) {
@@ -96,14 +96,14 @@ router.put('/:id', authenticateAdmin, async (req: AuthenticatedRequest, res: Res
       `UPDATE products SET 
         title = ?, category = ?, price = ?, originalPrice = ?, image = ?, rating = ?, reviews = ?,
         description = ?, origin = ?, weight = ?, storage = ?, comfortRating = ?, cookingTip = ?,
-        badges = ?, isNew = ?, brand = ?
+        badges = ?, isNew = ?, brand = ?, cost = ?
        WHERE id = ?`,
       [
         title, category, Number(price), originalPrice ? Number(originalPrice) : null,
         image, rating ? Number(rating) : 5.0, reviews ? Number(reviews) : 0,
         description || '', origin || '', weight || '', storage || '',
         comfortRating ? Number(comfortRating) : null, cookingTip || '',
-        badgesStr, isNewInt, brand || '', id
+        badgesStr, isNewInt, brand || '', cost ? Number(cost) : 0, id
       ]
     );
 

@@ -8,6 +8,7 @@ interface HomePageProps {
   petFood: string;
   heroTitle: string;
   heroImage: string;
+  heroSlides?: Array<{ id: string; title: string; desc: string; img: string; btnText: string }>;
   products: Product[];
   setCurrentPage: (page: any) => void;
   setCategory: (category: string) => void;
@@ -26,6 +27,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   petFood,
   heroTitle,
   heroImage,
+  heroSlides,
   products,
   setCurrentPage,
   setCategory,
@@ -37,21 +39,29 @@ export const HomePage: React.FC<HomePageProps> = ({
   blogArticles,
   appLogo
 }) => {
-  const slides = [
+  const slides = (heroSlides && heroSlides.length > 0) ? heroSlides.map((s, idx) => ({
+    img: s.img || (idx === 0 ? (heroImage || petHero) : idx === 1 ? dogBed : petFood),
+    title: s.title || heroTitle || '樂肉選品\n與毛孩共居的質感生活',
+    desc: s.desc || '與樂樂與肉肉的溫暖共居日常',
+    btnText: s.btnText || bannerBtnText || '探索樂肉選品'
+  })) : [
     { 
       img: heroImage || petHero, 
       title: heroTitle || '樂肉選品\n與毛孩共居的質感生活',
-      desc: '與樂樂與肉肉的溫暖共居日常'
+      desc: '與樂樂與肉肉的溫暖共居日常',
+      btnText: bannerBtnText || '探索樂肉選品'
     },
     { 
       img: dogBed, 
       title: '職人手工雙針雙線\n義大利植鞣牛皮牽繩',
-      desc: '經年累月的溫潤皮革焦糖色澤'
+      desc: '經年累月的溫潤皮革焦糖色澤',
+      btnText: '查看植鞣選品'
     },
     { 
       img: petFood, 
       title: '舒緩分離焦慮\n天然藏食嗅聞益智玩具',
-      desc: '健康消耗毛孩多餘精力與壓力'
+      desc: '健康消耗毛孩多餘精力與壓力',
+      btnText: '選購紓壓玩具'
     }
   ];
 
@@ -60,7 +70,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   const [instagramPosts, setInstagramPosts] = useState<any[]>([]);
 
   useEffect(() => {
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+    const BACKEND_URL = import.meta.env.DEV ? '' : window.location.origin;
     fetch(`${BACKEND_URL}/api/instagram/feed`)
       .then(res => res.json())
       .then(data => {
@@ -151,7 +161,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                           boxShadow: '0 4px 15px rgba(0,0,0,0.15)'
                         }}
                       >
-                        {bannerBtnText || '探索全系列選物'} <ArrowRight size={18} />
+                        {slide.btnText || bannerBtnText || '探索全系列選物'} <ArrowRight size={18} />
                       </button>
                     </div>
                   </div>

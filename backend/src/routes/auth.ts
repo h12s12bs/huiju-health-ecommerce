@@ -240,6 +240,10 @@ router.post('/customer-login', async (req, res) => {
       return res.status(401).json({ error: '電子信箱或密碼不正確' });
     }
 
+    if (customer.isBlacklisted === 1) {
+      return res.status(403).json({ error: '此帳戶已被列入黑名單，無法登入。如有疑問請聯絡客服。' });
+    }
+
     // If it's a social account that hasn't set a password
     if (customer.provider !== 'Email' && !customer.password) {
       return res.status(400).json({ 

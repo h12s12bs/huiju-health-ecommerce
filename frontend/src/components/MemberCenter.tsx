@@ -10,7 +10,7 @@ interface MemberCenterProps {
   wishlist: string[];
   toggleWishlist: (id: string, e: React.MouseEvent) => void;
   addToCart: (product: Product, quantity?: number) => void;
-  setCurrentPage: (page: string) => void;
+  setCurrentPage: (page: any) => void;
   setSelectedProduct: (prod: Product | null) => void;
   BACKEND_URL: string;
 }

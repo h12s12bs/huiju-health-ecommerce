@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { 
   BarChart3, PlusCircle, Users, Landmark, ShoppingBag, 
-  Printer, Edit, Trash2, Plus, X, FileText, Upload, ArrowLeft, Settings 
+  Printer, Edit, Trash2, Plus, X, FileText, Upload, ArrowLeft, Settings,
+  Search, Tag, ShieldAlert, UserX, UserCheck
 } from 'lucide-react';
 import type { Product, Order, Customer } from '../App';
 import { RichTextEditor } from './RichTextEditor';
@@ -17,6 +18,7 @@ interface AdminPanelProps {
   setIntegrationKeys: (keys: any) => void;
   saveSettings: (settings: any) => Promise<boolean>;
   refreshOrders?: () => void;
+  refreshCustomers?: () => void;
   announcementText: string;
   setAnnouncementText: (text: string) => void;
   heroTitle: string;
@@ -24,6 +26,8 @@ interface AdminPanelProps {
   heroDesc: string;
   heroImage: string;
   setHeroImage: (image: string) => void;
+  heroSlides: Array<{ id: string; title: string; desc: string; img: string; btnText: string }>;
+  setHeroSlides: (slides: Array<{ id: string; title: string; desc: string; img: string; btnText: string }>) => void;
   blogArticles: any[];
   setPrintingOrder: (order: Order | null) => void;
   appLogo: string;
@@ -57,6 +61,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   setIntegrationKeys,
   saveSettings,
   refreshOrders,
+  refreshCustomers,
   announcementText,
   setAnnouncementText,
   heroTitle,
@@ -64,6 +69,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   heroDesc,
   heroImage,
   setHeroImage,
+  heroSlides,
+  setHeroSlides,
   blogArticles,
   setPrintingOrder,
   appLogo,
@@ -95,6 +102,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const [newCatInput, setNewCatInput] = useState('');
   const [newBrandInput, setNewBrandInput] = useState('');
   const [quickCatInput, setQuickCatInput] = useState('');
+  const [quickBrandInput, setQuickBrandInput] = useState('');
 
   // Nav Item Management local states
   const [newNavNameInput, setNewNavNameInput] = useState('');
@@ -103,6 +111,39 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
   // ECPay Logistics State & Handler
   const [logisticsLoading, setLogisticsLoading] = useState<string | null>(null);
+
+  // CRM Customer Management state
+  const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
+  const [isCustomerModalOpen, setIsCustomerModalOpen] = useState(false);
+  const [customerForm, setCustomerForm] = useState({
+    name: '',
+    email: '',
+    provider: 'Custom',
+    tags: '',
+    isBlacklisted: false,
+    points: 0
+  });
+  const [crmSearchQuery, setCrmSearchQuery] = useState('');
+  const [crmStatusFilter, setCrmStatusFilter] = useState<'all' | 'normal' | 'blacklist'>('all');
+
+  // Order CRUD Modal state
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [editingOrderId, setEditingOrderId] = useState<string | null>(null);
+  const [orderForm, setOrderForm] = useState({
+    shippingName: '',
+    shippingPhone: '',
+    shippingAddress: '',
+    shippingEmail: '',
+    paymentType: '貨到付款',
+    logisticsType: 'HOME',
+    logisticsSubType: 'TCAT',
+    cvsStoreID: '',
+    cvsStoreName: '',
+    couponCode: '',
+    discountAmount: 0,
+    status: '待付款',
+    items: [] as Array<{ id: string; title: string; price: number; qty: number; image: string }>
+  });
 
   const handleCreateEcpayLogistics = async (orderId: string) => {
     setLogisticsLoading(orderId);
@@ -133,51 +174,28 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const handleSaveCategories = async (updatedCats: Array<{ id: string; name: string }>) => {
     setCustomCategories(updatedCats);
     await saveSettings({
-      announcementText,
-      heroTitle,
-      heroDesc,
-      heroImage,
-      customCategories: JSON.stringify(updatedCats),
-      customBrands: JSON.stringify(customBrands),
-      navItems: JSON.stringify(navItems),
-      bannerBtnText,
-      layoutOrder: JSON.stringify(layoutOrder),
-      instagramUrl,
-      lineUrl
+      customCategories: JSON.stringify(updatedCats)
     });
   };
 
   const handleSaveBrands = async (updatedBrands: Array<{ id: string; name: string }>) => {
     setCustomBrands(updatedBrands);
     await saveSettings({
-      announcementText,
-      heroTitle,
-      heroDesc,
-      heroImage,
-      customCategories: JSON.stringify(customCategories),
-      customBrands: JSON.stringify(updatedBrands),
-      navItems: JSON.stringify(navItems),
-      bannerBtnText,
-      layoutOrder: JSON.stringify(layoutOrder),
-      instagramUrl,
-      lineUrl
+      customBrands: JSON.stringify(updatedBrands)
     });
   };
 
   const handleSaveNavItems = async (updatedNav: Array<{ id: string; name: string; category?: string; page?: string }>) => {
     setNavItems(updatedNav);
     await saveSettings({
-      announcementText,
-      heroTitle,
-      heroDesc,
-      heroImage,
-      customCategories: JSON.stringify(customCategories),
-      customBrands: JSON.stringify(customBrands),
-      navItems: JSON.stringify(updatedNav),
-      bannerBtnText,
-      layoutOrder: JSON.stringify(layoutOrder),
-      instagramUrl,
-      lineUrl
+      navItems: JSON.stringify(updatedNav)
+    });
+  };
+
+  const handleSaveHeroSlides = async (updatedSlides: Array<{ id: string; title: string; desc: string; img: string; btnText: string }>) => {
+    setHeroSlides(updatedSlides);
+    await saveSettings({
+      heroSlides: JSON.stringify(updatedSlides)
     });
   };
 
@@ -239,6 +257,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     category: 'apparel',
     price: 0,
     originalPrice: 0,
+    cost: 0,
     description: '',
     origin: '台灣設計製造',
     weight: '規格可選',
@@ -266,29 +285,50 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const shippingRevenue = orders.reduce((sum, o) => sum + (o.total >= 2000 ? 0 : 100), 0);
   // Calculate shipping expense paid to shipping company (NT$60 per order)
   const shippingExpense = orders.reduce((sum, o) => sum + (o.total > 0 ? 60 : 0), 0);
-  // Product Cost of Goods (estimated at 45% of items total revenue)
-  const costOfGoods = Math.floor((totalRevenue - shippingRevenue) * 0.45);
+
+  // Build product cost map
+  const productCostMap = new Map<string, number>();
+  products.forEach(p => {
+    productCostMap.set(p.id, p.cost || 0);
+    productCostMap.set(p.title, p.cost || 0);
+  });
+
+  // Calculate actual cost of goods sold (COGS)
+  const calculateCogsForOrder = (order: Order) => {
+    let orderCogs = 0;
+    if (order.items && Array.isArray(order.items)) {
+      order.items.forEach(item => {
+        const itemCost = productCostMap.get((item as any).id) ?? productCostMap.get(item.title) ?? Math.floor(item.price * 0.45);
+        const qty = item.qty || (item as any).count || 1;
+        orderCogs += itemCost * qty;
+      });
+    }
+    return orderCogs;
+  };
+
+  const costOfGoods = orders.reduce((sum, o) => sum + calculateCogsForOrder(o), 0);
   // Real Net Profit
   const netProfit = totalRevenue - costOfGoods - shippingExpense;
 
   // Monthly statistics generator from real order data
   const getMonthlyAccounting = () => {
-    const monthlyMap: Record<string, { revenue: number; shipRev: number; shipExp: number; orders: number }> = {};
+    const monthlyMap: Record<string, { revenue: number; shipRev: number; shipExp: number; orders: number; cogs: number }> = {};
     orders.forEach(order => {
       const monthKey = order.date.substring(0, 7); // e.g. "2026-07"
       if (!monthlyMap[monthKey]) {
-        monthlyMap[monthKey] = { revenue: 0, shipRev: 0, shipExp: 0, orders: 0 };
+        monthlyMap[monthKey] = { revenue: 0, shipRev: 0, shipExp: 0, orders: 0, cogs: 0 };
       }
       monthlyMap[monthKey].revenue += order.total;
       monthlyMap[monthKey].shipRev += order.total >= 2000 ? 0 : 100;
       monthlyMap[monthKey].shipExp += 60;
       monthlyMap[monthKey].orders += 1;
+      monthlyMap[monthKey].cogs += calculateCogsForOrder(order);
     });
 
     return Object.entries(monthlyMap).map(([mKey, data]) => {
       const parts = mKey.split('-');
       const monthStr = `${parts[0]}年${parts[1]}月`;
-      const netMonthlyRev = data.revenue - Math.floor((data.revenue - data.shipRev) * 0.45) - data.shipExp;
+      const netMonthlyRev = data.revenue - data.cogs - data.shipExp;
       return {
         month: monthStr,
         revenue: data.revenue,
@@ -367,6 +407,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       category: productForm.category,
       price: finalPrice,
       originalPrice: finalOriginalPrice,
+      cost: Number(productForm.cost || 0),
       image: productForm.image,
       rating: 5.0,
       reviews: 0,
@@ -398,6 +439,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       category: p.category,
       price: hasDiscount ? p.price : 0,
       originalPrice: p.originalPrice || p.price || 0,
+      cost: p.cost || 0,
       description: p.description,
       origin: p.origin,
       weight: p.weight,
@@ -414,8 +456,296 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     });
     setIsFormOpen(true);
   };
+  // CRM Customer CRUD Handlers
+  const handleOpenAddCustomer = () => {
+    setEditingCustomer(null);
+    setCustomerForm({
+      name: '',
+      email: '',
+      provider: 'Custom',
+      tags: '',
+      isBlacklisted: false,
+      points: 0
+    });
+    setIsCustomerModalOpen(true);
+  };
 
+  const handleOpenEditCustomer = (c: Customer) => {
+    setEditingCustomer(c);
+    setCustomerForm({
+      name: c.name,
+      email: c.email,
+      provider: c.provider || 'Custom',
+      tags: c.tags || '',
+      isBlacklisted: c.isBlacklisted === 1 || (c.isBlacklisted as any) === true,
+      points: c.points || 0
+    });
+    setIsCustomerModalOpen(true);
+  };
 
+  const handleSaveCustomer = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!customerForm.name || !customerForm.email) {
+      alert('姓名與電子郵件為必填欄位');
+      return;
+    }
+    
+    const token = localStorage.getItem('adminToken');
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+    };
+    
+    try {
+      let response;
+      if (editingCustomer) {
+        // Update
+        response = await fetch(`${BACKEND_URL}/api/customers/${editingCustomer.id}`, {
+          method: 'PUT',
+          headers,
+          body: JSON.stringify(customerForm)
+        });
+      } else {
+        // Create
+        response = await fetch(`${BACKEND_URL}/api/customers`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(customerForm)
+        });
+      }
+      
+      if (response.ok) {
+        setIsCustomerModalOpen(false);
+        if (refreshCustomers) refreshCustomers();
+      } else {
+        const err = await response.json();
+        alert(err.error || '儲存客戶資料失敗');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('儲存發生錯誤，請稍後再試');
+    }
+  };
+
+  const handleDeleteCustomer = async (id: string) => {
+    if (!window.confirm('確定要刪除此顧客資料嗎？此動作無法復原。')) {
+      return;
+    }
+    
+    const token = localStorage.getItem('adminToken');
+    const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
+    
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/customers/${id}`, {
+        method: 'DELETE',
+        headers
+      });
+      if (response.ok) {
+        if (refreshCustomers) refreshCustomers();
+      } else {
+        const err = await response.json();
+        alert(err.error || '刪除客戶失敗');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('刪除發生錯誤，請稍後再試');
+    }
+  };
+
+  const handleToggleBlacklist = async (c: Customer) => {
+    const token = localStorage.getItem('adminToken');
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+    };
+    
+    const targetState = c.isBlacklisted === 1 ? false : true;
+    const confirmMsg = targetState 
+      ? `確定要將「${c.name}」列入黑名單嗎？`
+      : `確定要將「${c.name}」移出黑名單嗎？`;
+      
+    if (!window.confirm(confirmMsg)) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/customers/${c.id}`, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({
+          name: c.name,
+          email: c.email,
+          tags: c.tags,
+          points: c.points,
+          isBlacklisted: targetState
+        })
+      });
+      if (response.ok) {
+        if (refreshCustomers) refreshCustomers();
+      } else {
+        const err = await response.json();
+        alert(err.error || '操作失敗');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('操作發生錯誤，請稍後再試');
+    }
+  };
+
+  const handleOpenAddOrder = () => {
+    setEditingOrderId(null);
+    setOrderForm({
+      shippingName: '',
+      shippingPhone: '',
+      shippingAddress: '',
+      shippingEmail: '',
+      paymentType: '貨到付款',
+      logisticsType: 'HOME',
+      logisticsSubType: 'TCAT',
+      cvsStoreID: '',
+      cvsStoreName: '',
+      couponCode: '',
+      discountAmount: 0,
+      status: '待付款',
+      items: []
+    });
+    setIsOrderModalOpen(true);
+  };
+
+  const handleOpenEditOrder = (o: Order) => {
+    setEditingOrderId(o.id);
+    setOrderForm({
+      shippingName: o.shippingName || '',
+      shippingPhone: o.shippingPhone || '',
+      shippingAddress: o.shippingAddress || '',
+      shippingEmail: o.shippingEmail || '',
+      paymentType: o.paymentType || '貨到付款',
+      logisticsType: o.logisticsType || 'HOME',
+      logisticsSubType: o.logisticsSubType || 'TCAT',
+      cvsStoreID: o.cvsStoreID || '',
+      cvsStoreName: o.cvsStoreName || '',
+      couponCode: o.couponCode || '',
+      discountAmount: o.discountAmount || 0,
+      status: o.status || '待付款',
+      items: o.items.map(item => ({
+        id: (item as any).id || products.find(p => p.title === item.title)?.id || '',
+        title: item.title,
+        price: item.price,
+        qty: item.qty || (item as any).count || 1,
+        image: (item as any).image || products.find(p => p.title === item.title)?.image || ''
+      }))
+    });
+    setIsOrderModalOpen(true);
+  };
+
+  const handleDeleteOrder = async (orderId: string) => {
+    if (!confirm(`確定要刪除訂單 ${orderId} 嗎？此動作將無法復原，並會自動扣減客戶消費統計。`)) {
+      return;
+    }
+    const token = localStorage.getItem('adminToken');
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/orders/${orderId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        alert('訂單刪除成功！已更新客戶統計資料。');
+        if (refreshOrders) refreshOrders();
+        if (refreshCustomers) refreshCustomers();
+      } else {
+        const err = await response.json();
+        alert(err.error || '刪除訂單失敗');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('連接伺服器失敗，請稍後再試。');
+    }
+  };
+
+  const handleSaveOrderSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (orderForm.items.length === 0) {
+      alert('訂單必須包含至少一項商品！');
+      return;
+    }
+
+    const itemsSubtotal = orderForm.items.reduce((sum, item) => sum + item.price * item.qty, 0);
+    const shippingFee = itemsSubtotal >= 2000 ? 0 : 100;
+    const finalTotal = Math.max(0, itemsSubtotal + shippingFee - Number(orderForm.discountAmount || 0));
+
+    const payload = {
+      items: orderForm.items,
+      total: finalTotal,
+      shippingName: orderForm.shippingName,
+      shippingPhone: orderForm.shippingPhone,
+      shippingAddress: orderForm.shippingAddress,
+      shippingEmail: orderForm.shippingEmail,
+      paymentType: orderForm.paymentType,
+      logisticsType: orderForm.logisticsType,
+      logisticsSubType: orderForm.logisticsSubType,
+      cvsStoreID: orderForm.cvsStoreID || null,
+      cvsStoreName: orderForm.cvsStoreName || null,
+      couponCode: orderForm.couponCode || null,
+      discountAmount: Number(orderForm.discountAmount) || 0,
+      status: orderForm.status
+    };
+
+    const token = localStorage.getItem('adminToken');
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+    };
+
+    try {
+      let response;
+      if (editingOrderId) {
+        // Edit order
+        response = await fetch(`${BACKEND_URL}/api/orders/${editingOrderId}`, {
+          method: 'PUT',
+          headers,
+          body: JSON.stringify(payload)
+        });
+      } else {
+        // Add order
+        response = await fetch(`${BACKEND_URL}/api/orders`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            items: orderForm.items,
+            total: finalTotal,
+            shippingInfo: {
+              name: orderForm.shippingName,
+              phone: orderForm.shippingPhone,
+              address: orderForm.shippingAddress,
+              email: orderForm.shippingEmail
+            },
+            paymentType: orderForm.paymentType,
+            logisticsType: orderForm.logisticsType,
+            logisticsSubType: orderForm.logisticsSubType,
+            cvsStoreID: orderForm.cvsStoreID || null,
+            cvsStoreName: orderForm.cvsStoreName || null,
+            couponCode: orderForm.couponCode || null,
+            discountAmount: Number(orderForm.discountAmount) || 0
+          })
+        });
+      }
+
+      if (response.ok) {
+        alert(editingOrderId ? '訂單修改成功！' : '管理員代客下單建立成功！');
+        setIsOrderModalOpen(false);
+        if (refreshOrders) refreshOrders();
+        if (refreshCustomers) refreshCustomers();
+      } else {
+        const err = await response.json();
+        alert(err.error || '儲存訂單失敗');
+      }
+     } catch (err) {
+      console.error(err);
+      alert('儲存訂單發生錯誤: ' + (err instanceof Error ? err.message : String(err)));
+    }
+  };
 
   // Save Settings Config
   const handleSettingsUpdate = (e: React.FormEvent) => {
@@ -574,6 +904,186 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 </div>
               </div>
 
+              {/* Visual Analytics Dashboard */}
+              {(() => {
+                const chartData = [...monthlyReport].reverse();
+                const maxRevenue = Math.max(...chartData.map(d => d.revenue), 1000);
+                const totalInflow = totalRevenue + shippingRevenue;
+                const profitPct = totalInflow > 0 ? Math.round((netProfit / totalInflow) * 100) : 0;
+                const cogsPct = totalInflow > 0 ? Math.round((costOfGoods / totalInflow) * 100) : 0;
+                const shipPct = totalInflow > 0 ? Math.min(100 - profitPct - cogsPct, Math.round((shippingExpense / totalInflow) * 100)) : 0;
+
+                return (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
+                    {/* SVG Bar Chart for Sales Trend */}
+                    <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '12px', border: '1px solid var(--border)', background: '#fff' }}>
+                      <h4 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1.25rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ width: '4px', height: '16px', background: 'var(--primary)', borderRadius: '2px', display: 'inline-block' }}></span>
+                        月度營業額銷售趨勢
+                      </h4>
+                      {chartData.length === 0 ? (
+                        <div style={{ height: '180px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
+                          暫無足夠的數據進行圖表分析
+                        </div>
+                      ) : (
+                        <div>
+                          <svg viewBox="0 0 500 220" style={{ width: '100%', height: 'auto', overflow: 'visible' }}>
+                            {/* Grid lines */}
+                            {[0, 0.25, 0.5, 0.75, 1].map((ratio, i) => {
+                              const yVal = 180 - ratio * 140;
+                              const gridLabel = Math.round((maxRevenue * ratio) / 1000) * 1000;
+                              return (
+                                <g key={i}>
+                                  <line x1="40" y1={yVal} x2="480" y2={yVal} stroke="#f1f5f9" strokeWidth="1" strokeDasharray="4 4" />
+                                  <text x="35" y={yVal + 3} textAnchor="end" fill="var(--text-secondary)" fontSize="9">
+                                    {ratio === 0 ? '0' : `NT$ ${gridLabel.toLocaleString()}`}
+                                  </text>
+                                </g>
+                              );
+                            })}
+                            
+                            {/* Bars */}
+                            {chartData.map((d, idx) => {
+                              const barCount = chartData.length;
+                              const containerWidth = 420;
+                              const barWidth = Math.min(30, (containerWidth / barCount) * 0.4);
+                              const spacing = (containerWidth - barWidth * barCount) / (barCount + 1);
+                              
+                              const xVal = 40 + spacing + idx * (barWidth + spacing);
+                              const heightVal = (d.revenue / maxRevenue) * 140;
+                              const yVal = 180 - heightVal;
+                              
+                              return (
+                                <g key={idx}>
+                                  <title>{`${d.month}: NT$ ${d.revenue.toLocaleString()}`}</title>
+                                  {/* Background hover bar */}
+                                  <rect x={xVal - 4} y="20" width={barWidth + 8} height="165" fill="transparent" />
+                                  {/* Actual bar */}
+                                  <rect 
+                                    x={xVal} 
+                                    y={yVal} 
+                                    width={barWidth} 
+                                    height={Math.max(2, heightVal)} 
+                                    rx="3" 
+                                    fill="url(#dashboardBarGrad)" 
+                                  />
+                                  {/* Label text */}
+                                  <text x={xVal + barWidth / 2} y={yVal - 5} textAnchor="middle" fill="var(--primary)" fontSize="8" fontWeight="bold">
+                                    {d.revenue > 0 ? `${Math.round(d.revenue / 1000)}k` : ''}
+                                  </text>
+                                  {/* Axis label */}
+                                  <text x={xVal + barWidth / 2} y="196" textAnchor="middle" fill="var(--text-secondary)" fontSize="8">
+                                    {d.month.replace('年', '/').replace('月', '')}
+                                  </text>
+                                </g>
+                              );
+                            })}
+                            
+                            <defs>
+                              <linearGradient id="dashboardBarGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="var(--primary)" />
+                                <stop offset="100%" stopColor="var(--accent)" />
+                              </linearGradient>
+                            </defs>
+                            
+                            {/* X-axis */}
+                            <line x1="40" y1="180" x2="480" y2="180" stroke="#cbd5e1" strokeWidth="1" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* SVG Doughnut Chart for Cost / Revenue Structure */}
+                    <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '12px', border: '1px solid var(--border)', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+                      <h4 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1.25rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ width: '4px', height: '16px', background: 'var(--accent)', borderRadius: '2px', display: 'inline-block' }}></span>
+                        累計收支與利潤比例
+                      </h4>
+                      <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        {totalInflow === 0 ? (
+                          <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>暫無銷售數據</div>
+                        ) : (
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', gap: '1rem', flexWrap: 'wrap' }}>
+                            <div style={{ position: 'relative', width: '110px', height: '110px' }}>
+                              <svg width="110" height="110" viewBox="0 0 36 36" style={{ transform: 'rotate(-90deg)', overflow: 'visible' }}>
+                                <circle cx="18" cy="18" r="15.915" fill="none" stroke="#f1f5f9" strokeWidth="4" />
+                                
+                                {/* COGS segment */}
+                                <circle 
+                                  cx="18" 
+                                  cy="18" 
+                                  r="15.915" 
+                                  fill="none" 
+                                  stroke="#f97316" 
+                                  strokeWidth="4.2" 
+                                  strokeDasharray={`${cogsPct} ${100 - cogsPct}`}
+                                  strokeDashoffset="0"
+                                />
+                                
+                                {/* Shipping segment */}
+                                <circle 
+                                  cx="18" 
+                                  cy="18" 
+                                  r="15.915" 
+                                  fill="none" 
+                                  stroke="var(--error)" 
+                                  strokeWidth="4.2" 
+                                  strokeDasharray={`${shipPct} ${100 - shipPct}`}
+                                  strokeDashoffset={-cogsPct}
+                                />
+
+                                {/* Net Profit segment */}
+                                <circle 
+                                  cx="18" 
+                                  cy="18" 
+                                  r="15.915" 
+                                  fill="none" 
+                                  stroke="var(--success)" 
+                                  strokeWidth="4.2" 
+                                  strokeDasharray={`${profitPct} ${100 - profitPct}`}
+                                  strokeDashoffset={-(cogsPct + shipPct)}
+                                />
+                              </svg>
+                              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
+                                <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--success)', lineHeight: 1 }}>{profitPct}%</div>
+                                <div style={{ fontSize: '0.6rem', color: 'var(--text-secondary)', marginTop: '2px' }}>預估淨利</div>
+                              </div>
+                            </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', fontSize: '0.75rem', minWidth: '150px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <span style={{ width: '8px', height: '8px', background: 'var(--success)', borderRadius: '50%' }}></span>
+                                  預估淨利
+                                </span>
+                                <span style={{ fontWeight: 600 }}>{profitPct}%</span>
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <span style={{ width: '8px', height: '8px', background: '#f97316', borderRadius: '50%' }}></span>
+                                  銷貨成本
+                                </span>
+                                <span style={{ fontWeight: 600 }}>{cogsPct}%</span>
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <span style={{ width: '8px', height: '8px', background: 'var(--error)', borderRadius: '50%' }}></span>
+                                  運費支出
+                                </span>
+                                <span style={{ fontWeight: 600 }}>{shipPct}%</span>
+                              </div>
+                              <div style={{ borderTop: '1px solid var(--border)', marginTop: '0.25rem', paddingTop: '0.25rem', fontSize: '0.65rem', color: 'var(--text-muted)' }}>
+                                * 基於 45% 商品採購成本估算
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+
               <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem', fontWeight: 600 }}>自動核算月度明細</h3>
               <div className="admin-table-container">
                 {monthlyReport.length === 0 ? (
@@ -619,10 +1129,21 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           {/* TAB 2: ORDERS MANAGEMENT & PRINT SLIP */}
           {activeAdminTab === 'orders' && (
             <div>
-              <h2 style={{ marginBottom: '1rem', fontSize: '1.6rem', fontWeight: 700 }}>訂單出貨與撿貨清單管理</h2>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '2rem' }}>
-                追蹤全站毛孩產品的訂單，支持修改物流狀態，並可直接預覽列印出貨撿貨單（Packing Slip）隨箱派送。
-              </p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                  <h2 style={{ fontSize: '1.6rem', fontWeight: 700, margin: 0 }}>訂單出貨與撿貨清單管理</h2>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                    追蹤全站毛孩產品的訂單，支持修改物流狀態，並可直接預覽列印出貨撿貨單（Packing Slip）隨箱派送。
+                  </p>
+                </div>
+                <button 
+                  className="btn btn-primary" 
+                  onClick={handleOpenAddOrder}
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', height: '42px', padding: '0 1.25rem', borderRadius: '8px' }}
+                >
+                  <PlusCircle size={16} /> 新增訂單
+                </button>
+              </div>
 
               <div className="admin-table-container">
                 {orders.length === 0 ? (
@@ -692,6 +1213,22 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                               >
                                 <Printer size={12} /> 撿貨單列印
                               </button>
+                              <div style={{ display: 'flex', gap: '0.4rem', width: '100%' }}>
+                                <button 
+                                  className="btn btn-secondary" 
+                                  style={{ padding: '0.35rem 0.5rem', fontSize: '0.75rem', flexGrow: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem' }}
+                                  onClick={() => handleOpenEditOrder(order)}
+                                >
+                                  <Edit size={12} /> 編輯
+                                </button>
+                                <button 
+                                  className="btn btn-secondary" 
+                                  style={{ padding: '0.35rem 0.5rem', fontSize: '0.75rem', flexGrow: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', color: 'var(--error)', borderColor: 'rgba(239, 68, 68, 0.2)' }}
+                                  onClick={() => handleDeleteOrder(order.id)}
+                                >
+                                  <Trash2 size={12} /> 刪除
+                                </button>
+                              </div>
                               
                               {order.logisticsType && order.logisticsType !== 'HOME' && (
                                 <>
@@ -731,6 +1268,378 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   </table>
                 )}
               </div>
+
+              {/* Order Add/Edit Modal */}
+              {isOrderModalOpen && (
+                <div className="woo-modal-overlay" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1000, padding: '1rem' }}>
+                  <div className="glass-panel" style={{ width: '100%', maxWidth: '720px', borderRadius: '16px', background: '#fff', border: '1px solid var(--border)', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.15)', maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                    
+                    {/* Fixed Header */}
+                    <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff' }}>
+                      <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <ShoppingBag size={20} style={{ color: 'var(--primary)' }} />
+                        {editingOrderId ? `編輯訂單：${editingOrderId}` : '建立代客訂單 (管理員新增)'}
+                      </h3>
+                      <button 
+                        type="button"
+                        onClick={() => setIsOrderModalOpen(false)} 
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', padding: '4px' }}
+                      >
+                        <X size={20} />
+                      </button>
+                    </div>
+
+                    {/* Form container */}
+                    <form onSubmit={handleSaveOrderSubmit} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+                      
+                      {/* Scrollable Body */}
+                      <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+                          <div className="form-group">
+                            <label className="form-label" style={{ fontWeight: 600 }}>收件人姓名 *</label>
+                            <input 
+                              type="text" 
+                              required
+                              className="form-input" 
+                              value={orderForm.shippingName}
+                              onChange={(e) => setOrderForm({ ...orderForm, shippingName: e.target.value })}
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label className="form-label" style={{ fontWeight: 600 }}>收件人電話 *</label>
+                            <input 
+                              type="text" 
+                              required
+                              className="form-input" 
+                              value={orderForm.shippingPhone}
+                              onChange={(e) => setOrderForm({ ...orderForm, shippingPhone: e.target.value })}
+                            />
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+                          <div className="form-group">
+                            <label className="form-label" style={{ fontWeight: 600 }}>收件人 Email *</label>
+                            <input 
+                              type="email" 
+                              required
+                              className="form-input" 
+                              value={orderForm.shippingEmail}
+                              onChange={(e) => setOrderForm({ ...orderForm, shippingEmail: e.target.value })}
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label className="form-label" style={{ fontWeight: 600 }}>收件地址 *</label>
+                            <input 
+                              type="text" 
+                              required
+                              className="form-input" 
+                              value={orderForm.shippingAddress}
+                              onChange={(e) => setOrderForm({ ...orderForm, shippingAddress: e.target.value })}
+                            />
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+                          <div className="form-group">
+                            <label className="form-label">付款方式</label>
+                            <select 
+                              className="form-input"
+                              value={orderForm.paymentType}
+                              onChange={(e) => setOrderForm({ ...orderForm, paymentType: e.target.value })}
+                              style={{ appearance: 'auto', padding: '0 8px' }}
+                            >
+                              <option value="貨到付款">貨到付款</option>
+                              <option value="信用卡">信用卡</option>
+                              <option value="GreenWorld">綠界科技 (ECPay)</option>
+                            </select>
+                          </div>
+                          <div className="form-group">
+                            <label className="form-label">物流類型</label>
+                            <select 
+                              className="form-input"
+                              value={orderForm.logisticsType}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                setOrderForm({ 
+                                  ...orderForm, 
+                                  logisticsType: val,
+                                  logisticsSubType: val === 'HOME' ? 'TCAT' : 'UNIMART',
+                                  cvsStoreID: '',
+                                  cvsStoreName: ''
+                                });
+                              }}
+                              style={{ appearance: 'auto', padding: '0 8px' }}
+                            >
+                              <option value="HOME">宅配到府</option>
+                              <option value="CVS">超商取貨</option>
+                            </select>
+                          </div>
+                          <div className="form-group">
+                            <label className="form-label">物流子類型</label>
+                            <select 
+                              className="form-input"
+                              value={orderForm.logisticsSubType}
+                              onChange={(e) => setOrderForm({ ...orderForm, logisticsSubType: e.target.value })}
+                              style={{ appearance: 'auto', padding: '0 8px' }}
+                            >
+                              {orderForm.logisticsType === 'HOME' ? (
+                                <>
+                                  <option value="TCAT">黑貓宅急便</option>
+                                  <option value="POST">郵局配送</option>
+                                </>
+                              ) : (
+                                <>
+                                  <option value="UNIMART">7-11 超商</option>
+                                  <option value="FAMI">全家超商</option>
+                                </>
+                              )}
+                            </select>
+                          </div>
+                        </div>
+
+                        {orderForm.logisticsType === 'CVS' && (
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+                            <div className="form-group">
+                              <label className="form-label">超商店號 (CVS ID)</label>
+                              <input 
+                                type="text" 
+                                className="form-input" 
+                                placeholder="例如: 991234"
+                                value={orderForm.cvsStoreID}
+                                onChange={(e) => setOrderForm({ ...orderForm, cvsStoreID: e.target.value })}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label className="form-label">超商名稱 (Store Name)</label>
+                              <input 
+                                type="text" 
+                                className="form-input" 
+                                placeholder="例如: 樂肉門市"
+                                value={orderForm.cvsStoreName}
+                                onChange={(e) => setOrderForm({ ...orderForm, cvsStoreName: e.target.value })}
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        <div style={{ border: '1px solid var(--border)', borderRadius: '8px', padding: '1rem', marginBottom: '1.25rem' }}>
+                          <h4 style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: '0.75rem', marginTop: 0 }}>選擇購買商品</h4>
+                          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <select 
+                              id="modalProductSelect"
+                              className="form-input"
+                              style={{ flex: '1 1 200px', appearance: 'auto', padding: '0 8px' }}
+                              defaultValue=""
+                            >
+                              <option value="" disabled>-- 請選擇要新增的商品 --</option>
+                              {products.map(p => (
+                                <option key={p.id} value={p.id}>
+                                  {p.title} (NT$ {p.price.toLocaleString()})
+                                </option>
+                              ))}
+                            </select>
+                            <input 
+                              type="number" 
+                              id="modalProductQty"
+                              className="form-input" 
+                              defaultValue="1"
+                              min="1"
+                              style={{ width: '70px', padding: '0 8px' }}
+                            />
+                            <button
+                              type="button"
+                              className="btn btn-secondary"
+                              style={{ whiteSpace: 'nowrap', padding: '0 1rem', height: '42px' }}
+                              onClick={() => {
+                                const selectEl = document.getElementById('modalProductSelect') as HTMLSelectElement;
+                                const qtyEl = document.getElementById('modalProductQty') as HTMLInputElement;
+                                const prodId = selectEl?.value;
+                                const qty = parseInt(qtyEl?.value) || 1;
+                                
+                                if (!prodId) {
+                                  alert('請先選擇一個商品！');
+                                  return;
+                                }
+                                
+                                const prod = products.find(p => p.id === prodId);
+                                if (prod) {
+                                  const existingItemIdx = orderForm.items.findIndex(item => item.id === prod.id);
+                                  if (existingItemIdx > -1) {
+                                    const updated = [...orderForm.items];
+                                    updated[existingItemIdx].qty += qty;
+                                    setOrderForm({ ...orderForm, items: updated });
+                                  } else {
+                                    setOrderForm({
+                                      ...orderForm,
+                                      items: [
+                                        ...orderForm.items,
+                                        {
+                                          id: prod.id,
+                                          title: prod.title,
+                                          price: prod.price,
+                                          qty: qty,
+                                          image: prod.image
+                                        }
+                                      ]
+                                    });
+                                  }
+                                  selectEl.value = "";
+                                  qtyEl.value = "1";
+                                }
+                              }}
+                            >
+                              加入
+                            </button>
+                          </div>
+
+                          {/* Selected Items List */}
+                          <div style={{ marginTop: '1rem', maxHeight: '180px', overflowY: 'auto' }}>
+                            {orderForm.items.length === 0 ? (
+                              <p style={{ fontStyle: 'italic', fontSize: '0.85rem', color: 'var(--text-muted)', textAlign: 'center', margin: '1rem 0' }}>目前未添加任何商品</p>
+                            ) : (
+                              <table style={{ width: '100%', fontSize: '0.85rem', borderCollapse: 'collapse' }}>
+                                <thead>
+                                  <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left', color: 'var(--text-secondary)' }}>
+                                    <th style={{ padding: '4px 0' }}>品名</th>
+                                    <th>單價</th>
+                                    <th>數量</th>
+                                    <th>小計</th>
+                                    <th style={{ textAlign: 'right' }}>操作</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {orderForm.items.map((item, idx) => (
+                                    <tr key={item.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                                      <td style={{ padding: '6px 0', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</td>
+                                      <td>NT$ {item.price}</td>
+                                      <td>
+                                        <input 
+                                          type="number"
+                                          min="1"
+                                          value={item.qty}
+                                          onChange={(e) => {
+                                            const val = parseInt(e.target.value) || 1;
+                                            const updated = [...orderForm.items];
+                                            updated[idx].qty = val;
+                                            setOrderForm({ ...orderForm, items: updated });
+                                          }}
+                                          style={{ width: '50px', padding: '2px', border: '1px solid var(--border)', borderRadius: '4px' }}
+                                        />
+                                      </td>
+                                      <td>NT$ {item.price * item.qty}</td>
+                                      <td style={{ textAlign: 'right' }}>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const updated = orderForm.items.filter((_, i) => i !== idx);
+                                            setOrderForm({ ...orderForm, items: updated });
+                                          }}
+                                          style={{ background: 'none', border: 'none', color: 'var(--error)', cursor: 'pointer' }}
+                                        >
+                                          移除
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            )}
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+                          <div className="form-group">
+                            <label className="form-label">折扣代碼 (選填)</label>
+                            <input 
+                              type="text" 
+                              className="form-input" 
+                              placeholder="例如: NEW100"
+                              value={orderForm.couponCode}
+                              onChange={(e) => setOrderForm({ ...orderForm, couponCode: e.target.value })}
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label className="form-label">折抵金額 (NT$)</label>
+                            <input 
+                              type="number" 
+                              className="form-input" 
+                              value={orderForm.discountAmount}
+                              onChange={(e) => setOrderForm({ ...orderForm, discountAmount: Number(e.target.value) || 0 })}
+                            />
+                          </div>
+                        </div>
+
+                        {editingOrderId && (
+                          <div className="form-group" style={{ marginBottom: '1.25rem' }}>
+                            <label className="form-label">訂單狀態</label>
+                            <select 
+                              className="form-input"
+                              value={orderForm.status}
+                              onChange={(e) => setOrderForm({ ...orderForm, status: e.target.value })}
+                              style={{ appearance: 'auto', padding: '0 8px' }}
+                            >
+                              <option value="待付款">待付款</option>
+                              <option value="已付款">已付款</option>
+                              <option value="處理中 / 質感宅配">處理中 / 質感宅配</option>
+                              <option value="已出貨">已出貨</option>
+                              <option value="已完成">已完成</option>
+                              <option value="已取消">已取消</option>
+                            </select>
+                          </div>
+                        )}
+
+                        {/* Totals Summary */}
+                        {(() => {
+                          const itemsSubtotal = orderForm.items.reduce((sum, item) => sum + item.price * item.qty, 0);
+                          const shippingFee = itemsSubtotal >= 2000 || itemsSubtotal === 0 ? 0 : 100;
+                          const finalTotal = Math.max(0, itemsSubtotal + shippingFee - Number(orderForm.discountAmount || 0));
+
+                          return (
+                            <div style={{ background: 'var(--bg-secondary)', borderRadius: '8px', padding: '1rem', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
+                                <span style={{ color: 'var(--text-secondary)' }}>商品小計:</span>
+                                <span>NT$ {itemsSubtotal.toLocaleString()}</span>
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
+                                <span style={{ color: 'var(--text-secondary)' }}>物流運費:</span>
+                                <span>NT$ {shippingFee.toLocaleString()} {itemsSubtotal >= 2000 && <span style={{ color: 'var(--success)', fontSize: '0.75rem' }}>(滿額免運)</span>}</span>
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem', color: 'var(--error)' }}>
+                                <span>活動折抵:</span>
+                                <span>-NT$ {Number(orderForm.discountAmount).toLocaleString()}</span>
+                              </div>
+                              <div style={{ borderTop: '1px solid var(--border)', paddingTop: '0.5rem', marginTop: '0.5rem', display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '1rem', color: 'var(--primary)' }}>
+                                <span>應付總額:</span>
+                                <span>NT$ {finalTotal.toLocaleString()}</span>
+                              </div>
+                            </div>
+                          );
+                        })()}
+                      </div>
+
+                      {/* Fixed Footer Actions */}
+                      <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'flex-end', gap: '1rem', background: '#fafafa' }}>
+                        <button 
+                          type="button" 
+                          className="btn btn-secondary" 
+                          onClick={() => setIsOrderModalOpen(false)}
+                          style={{ height: '42px', padding: '0 1.5rem' }}
+                        >
+                          取消
+                        </button>
+                        <button 
+                          type="submit" 
+                          className="btn btn-primary"
+                          style={{ height: '42px', padding: '0 1.5rem' }}
+                        >
+                          {editingOrderId ? '儲存修改' : '建立代客訂單'}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
             </div>
           )}
  
@@ -749,6 +1658,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                         category: 'apparel',
                         price: 0,
                         originalPrice: 0,
+                        cost: 0,
                         description: '',
                         origin: '台灣設計製造',
                         weight: '規格可選',
@@ -767,7 +1677,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     }}
                     style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
                   >
-                    <Plus size={16} /> 新增商品 (WooCommerce 模式)
+                    <Plus size={16} /> 新增商品
                   </button>
                 )}
               </div>
@@ -814,8 +1724,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       </div>
 
                       <div className="woo-editor-box">
-                        <div className="woo-editor-box-title">產品詳細資料 (WooCommerce 面板)</div>
-                        <div className="form-group-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                        <div className="woo-editor-box-title">產品詳細資料</div>
+                        <div className="form-group-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
                           <div className="form-group">
                             <label className="form-label" style={{ fontWeight: 600 }}>特價 / 促銷價 (NT$選填)</label>
                             <input 
@@ -834,6 +1744,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                               placeholder="例如：980" 
                               value={productForm.originalPrice || ''}
                               onChange={(e) => setProductForm({ ...productForm, originalPrice: Number(e.target.value) })}
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label className="form-label" style={{ fontWeight: 600 }}>進貨成本 (NT$)</label>
+                            <input 
+                              type="number" 
+                              className="form-input" 
+                              placeholder="例如：450" 
+                              value={productForm.cost || ''}
+                              onChange={(e) => setProductForm({ ...productForm, cost: Number(e.target.value) })}
                             />
                           </div>
                         </div>
@@ -1039,56 +1959,115 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                             <button
                               type="button"
                               className="btn btn-primary"
-                              style={{ height: '30px', padding: '0 0.75rem', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', gap: '2px' }}
+                              style={{ height: '30px', padding: '0 0.5rem', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                               onClick={async () => {
                                 const name = quickCatInput.trim();
                                 if (!name) return;
                                 const id = 'cat-' + Date.now();
                                 const updated = [...customCategories, { id, name }];
-                                await handleSaveCategories(updated);
+                                  await handleSaveCategories(updated);
                                 setQuickCatInput('');
                                 setProductForm(prev => ({ ...prev, category: id })); // auto-select the newly added category
                               }}
                             >
-                              <Plus size={12} /> 新增
+                              <Plus size={12} />
                             </button>
                           </div>
                         </div>
                         
                         <div className="form-group" style={{ marginBottom: '1rem' }}>
-                          <label className="form-label">選擇商品品牌</label>
-                          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.25rem', marginBottom: '0.5rem' }}>
-                            {[...customBrands.map(cb => cb.name), '其他自訂'].map(b => {
-                              const isPredefined = customBrands.map(cb => cb.name).includes(productForm.brand);
-                              const isActive = b === '其他自訂' ? !isPredefined : productForm.brand === b;
-                              return (
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                            <label className="form-label" style={{ margin: 0 }}>選擇商品品牌</label>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>點擊選取，或直接點 [x] 刪除</span>
+                          </div>
+                          
+                          {/* List of brands with inline delete X */}
+                          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.25rem', marginBottom: '0.75rem' }}>
+                            {customBrands.map(brand => (
+                              <div 
+                                key={brand.id} 
+                                style={{ 
+                                  display: 'inline-flex', 
+                                  alignItems: 'center', 
+                                  gap: '4px',
+                                  padding: '0.3rem 0.6rem',
+                                  borderRadius: '6px',
+                                  border: '1px solid',
+                                  borderColor: productForm.brand === brand.name ? 'var(--primary)' : 'var(--border)',
+                                  background: productForm.brand === brand.name ? 'var(--accent-light)' : 'var(--bg-primary)',
+                                  color: productForm.brand === brand.name ? 'var(--primary)' : 'var(--text-secondary)',
+                                  fontWeight: productForm.brand === brand.name ? 600 : 500,
+                                  transition: 'all 0.2s'
+                                }}
+                              >
+                                <span 
+                                  style={{ cursor: 'pointer', fontSize: '0.85rem', userSelect: 'none' }}
+                                  onClick={() => setProductForm({ ...productForm, brand: brand.name })}
+                                >
+                                  {brand.name}
+                                </span>
                                 <button
-                                  key={b}
                                   type="button"
-                                  className={`category-btn ${isActive ? 'active' : ''}`}
-                                  onClick={() => {
-                                    if (b === '其他自訂') {
-                                      setProductForm({ ...productForm, brand: '' });
-                                    } else {
-                                      setProductForm({ ...productForm, brand: b });
+                                  onClick={async (e) => {
+                                    e.stopPropagation();
+                                    if (customBrands.length <= 1) {
+                                      alert('最少需保留一個品牌！');
+                                      return;
+                                    }
+                                    if (confirm(`確定要刪除品牌「${brand.name}」嗎？`)) {
+                                      const updated = customBrands.filter(b => b.id !== brand.id);
+                                      await handleSaveBrands(updated);
+                                      if (productForm.brand === brand.name && updated.length > 0) {
+                                        setProductForm(prev => ({ ...prev, brand: updated[0].name }));
+                                      }
                                     }
                                   }}
-                                  style={{ padding: '0.4rem 0.85rem', fontSize: '0.85rem', borderRadius: '6px' }}
+                                  style={{ 
+                                    background: 'none', 
+                                    border: 'none', 
+                                    color: productForm.brand === brand.name ? 'var(--primary)' : '#999', 
+                                    cursor: 'pointer', 
+                                    padding: '2px', 
+                                    display: 'flex', 
+                                    alignItems: 'center',
+                                    borderRadius: '50%',
+                                    marginLeft: '2px'
+                                  }}
+                                  title={`刪除品牌 ${brand.name}`}
                                 >
-                                  {b}
+                                  <X size={12} />
                                 </button>
-                              );
-                            })}
+                              </div>
+                            ))}
                           </div>
-                          {(!customBrands.map(cb => cb.name).includes(productForm.brand) || productForm.brand === '') && (
+
+                          {/* Quick Add inline Form */}
+                          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                             <input 
                               type="text" 
                               className="form-input" 
-                              placeholder="請輸入全新品牌名稱..." 
-                              value={productForm.brand}
-                              onChange={(e) => setProductForm({ ...productForm, brand: e.target.value })}
+                              placeholder="新增自訂品牌..." 
+                              style={{ height: '30px', padding: '0 0.5rem', fontSize: '0.8rem', width: '150px' }}
+                              value={quickBrandInput}
+                              onChange={(e) => setQuickBrandInput(e.target.value)}
                             />
-                          )}
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              style={{ height: '30px', padding: '0 0.5rem', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                              onClick={async () => {
+                                const name = quickBrandInput.trim();
+                                if (!name) return;
+                                const id = 'brand-' + Date.now();
+                                const updated = [...customBrands, { id, name }];
+                                await handleSaveBrands(updated);
+                                setQuickBrandInput('');
+                                setProductForm(prev => ({ ...prev, brand: name })); // auto-select the newly added brand
+                              }}
+                            >
+                              <Plus size={12} />
+                            </button>
+                          </div>
                         </div>
 
                         <div className="form-group">
@@ -1189,263 +2168,291 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       </tbody>
                     </table>
                   </div>
-
-                  {/* Category & Brand Management Section */}
-                  <div style={{ marginTop: '3rem', borderTop: '2px solid var(--border)', paddingTop: '2rem' }}>
-                    <h3 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary-dark)' }}>
-                      🏷️ 商品分類與品牌管理 (自訂選項)
-                    </h3>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
-                      
-                      {/* Column 1: Category Management */}
-                      <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '12px', background: '#fdfbf7', border: '1px solid var(--border)' }}>
-                        <h4 style={{ fontSize: '1.05rem', fontWeight: 600, marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span>📂 商品分類管理</span>
-                          <span style={{ fontSize: '0.75rem', fontWeight: 'normal', color: 'var(--text-muted)' }}>共 {customCategories.length} 個分類</span>
-                        </h4>
-                        
-                        {/* Search and Add Header */}
-                        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-                          <input 
-                            type="text" 
-                            className="form-input" 
-                            placeholder="搜尋分類..." 
-                            style={{ flexGrow: 1, background: '#fff', height: '36px', fontSize: '0.85rem' }}
-                            value={catSearchQuery}
-                            onChange={(e) => setCatSearchQuery(e.target.value)}
-                          />
-                          {!isAddingCat ? (
-                            <button 
-                              type="button" 
-                              className="btn btn-primary"
-                              onClick={() => setIsAddingCat(true)}
-                              style={{ padding: '0 0.85rem', display: 'flex', alignItems: 'center', gap: '0.25rem', whiteSpace: 'nowrap', height: '36px', fontSize: '0.85rem' }}
-                            >
-                              <Plus size={14} /> 新增
-                            </button>
-                          ) : (
-                            <div style={{ display: 'flex', gap: '0.25rem' }}>
-                              <input 
-                                type="text" 
-                                className="form-input" 
-                                placeholder="新分類名稱" 
-                                style={{ width: '120px', background: '#fff', height: '36px', fontSize: '0.85rem' }}
-                                value={newCatInput}
-                                onChange={(e) => setNewCatInput(e.target.value)}
-                                autoFocus
-                              />
-                              <button 
-                                type="button" 
-                                className="btn btn-primary"
-                                onClick={async () => {
-                                  const name = newCatInput.trim();
-                                  if (!name) return;
-                                  const id = 'cat-' + Date.now();
-                                  const updated = [...customCategories, { id, name }];
-                                  await handleSaveCategories(updated);
-                                  setNewCatInput('');
-                                  setIsAddingCat(false);
-                                }}
-                                style={{ padding: '0 0.5rem', height: '36px', fontSize: '0.85rem' }}
-                              >
-                                確定
-                              </button>
-                              <button 
-                                type="button" 
-                                className="btn btn-secondary"
-                                onClick={() => {
-                                  setNewCatInput('');
-                                  setIsAddingCat(false);
-                                }}
-                                style={{ padding: '0 0.5rem', height: '36px', fontSize: '0.85rem' }}
-                              >
-                                取消
-                              </button>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* List */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', maxHeight: '200px', overflowY: 'auto', background: '#fff', border: '1px solid var(--border)', borderRadius: '6px', padding: '0.5rem' }}>
-                          {customCategories
-                            .filter(cat => cat.name.toLowerCase().includes(catSearchQuery.toLowerCase()))
-                            .map(cat => (
-                              <div key={cat.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.4rem 0.6rem', borderBottom: '1px solid var(--bg-secondary)', fontSize: '0.85rem' }}>
-                                <span>{cat.name}</span>
-                                <button
-                                  type="button"
-                                  onClick={async () => {
-                                    if (customCategories.length <= 1) {
-                                      alert('最少需保留一個分類！');
-                                      return;
-                                    }
-                                    if (confirm(`確定要刪除分類「${cat.name}」嗎？`)) {
-                                      const updated = customCategories.filter(c => c.id !== cat.id);
-                                      await handleSaveCategories(updated);
-                                    }
-                                  }}
-                                  style={{ background: 'none', border: 'none', color: 'var(--error)', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}
-                                >
-                                  <X size={14} />
-                                </button>
-                              </div>
-                            ))}
-                          {customCategories.filter(cat => cat.name.toLowerCase().includes(catSearchQuery.toLowerCase())).length === 0 && (
-                            <div style={{ padding: '0.5rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.8rem' }}>無符合的分類</div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Column 2: Brand Management */}
-                      <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '12px', background: '#fdfbf7', border: '1px solid var(--border)' }}>
-                        <h4 style={{ fontSize: '1.05rem', fontWeight: 600, marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span>🎖️ 商品品牌管理</span>
-                          <span style={{ fontSize: '0.75rem', fontWeight: 'normal', color: 'var(--text-muted)' }}>共 {customBrands.length} 個品牌</span>
-                        </h4>
-                        
-                        {/* Search and Add Header */}
-                        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-                          <input 
-                            type="text" 
-                            className="form-input" 
-                            placeholder="搜尋品牌..." 
-                            style={{ flexGrow: 1, background: '#fff', height: '36px', fontSize: '0.85rem' }}
-                            value={brandSearchQuery}
-                            onChange={(e) => setBrandSearchQuery(e.target.value)}
-                          />
-                          {!isAddingBrand ? (
-                            <button 
-                              type="button" 
-                              className="btn btn-primary"
-                              onClick={() => setIsAddingBrand(true)}
-                              style={{ padding: '0 0.85rem', display: 'flex', alignItems: 'center', gap: '0.25rem', whiteSpace: 'nowrap', height: '36px', fontSize: '0.85rem' }}
-                            >
-                              <Plus size={14} /> 新增
-                            </button>
-                          ) : (
-                            <div style={{ display: 'flex', gap: '0.25rem' }}>
-                              <input 
-                                type="text" 
-                                className="form-input" 
-                                placeholder="新品牌名稱" 
-                                style={{ width: '120px', background: '#fff', height: '36px', fontSize: '0.85rem' }}
-                                value={newBrandInput}
-                                onChange={(e) => setNewBrandInput(e.target.value)}
-                                autoFocus
-                              />
-                              <button 
-                                type="button" 
-                                className="btn btn-primary"
-                                onClick={async () => {
-                                  const name = newBrandInput.trim();
-                                  if (!name) return;
-                                  const id = 'brand-' + Date.now();
-                                  const updated = [...customBrands, { id, name }];
-                                  await handleSaveBrands(updated);
-                                  setNewBrandInput('');
-                                  setIsAddingBrand(false);
-                                }}
-                                style={{ padding: '0 0.5rem', height: '36px', fontSize: '0.85rem' }}
-                              >
-                                確定
-                              </button>
-                              <button 
-                                type="button" 
-                                className="btn btn-secondary"
-                                onClick={() => {
-                                  setNewBrandInput('');
-                                  setIsAddingBrand(false);
-                                }}
-                                style={{ padding: '0 0.5rem', height: '36px', fontSize: '0.85rem' }}
-                              >
-                                取消
-                              </button>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* List */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', maxHeight: '200px', overflowY: 'auto', background: '#fff', border: '1px solid var(--border)', borderRadius: '6px', padding: '0.5rem' }}>
-                          {customBrands
-                            .filter(brand => brand.name.toLowerCase().includes(brandSearchQuery.toLowerCase()))
-                            .map(brand => (
-                              <div key={brand.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.4rem 0.6rem', borderBottom: '1px solid var(--bg-secondary)', fontSize: '0.85rem' }}>
-                                <span>{brand.name}</span>
-                                <button
-                                  type="button"
-                                  onClick={async () => {
-                                    if (customBrands.length <= 1) {
-                                      alert('最少需保留一個品牌！');
-                                      return;
-                                    }
-                                    if (confirm(`確定要刪除品牌「${brand.name}」嗎？`)) {
-                                      const updated = customBrands.filter(b => b.id !== brand.id);
-                                      await handleSaveBrands(updated);
-                                    }
-                                  }}
-                                  style={{ background: 'none', border: 'none', color: 'var(--error)', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}
-                                >
-                                  <X size={14} />
-                                </button>
-                              </div>
-                            ))}
-                          {customBrands.filter(brand => brand.name.toLowerCase().includes(brandSearchQuery.toLowerCase())).length === 0 && (
-                            <div style={{ padding: '0.5rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.8rem' }}>無符合的品牌</div>
-                          )}
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
                 </div>
               )}
             </div>
           )}
-
           {/* TAB 4: CRM CUSTOMERS MANAGEMENT */}
-          {activeAdminTab === 'crm' && (
-            <div>
-              <h2 style={{ marginBottom: '1.5rem', fontSize: '1.6rem', fontWeight: 700 }}>CRM 客戶管理與顧客資料</h2>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-                蒐集並管理透過 Google、LINE 或 Facebook 註冊的會員清單。支持累積點數、歷史交易總額追蹤，為您的毛孩行銷精準定位。
-              </p>
+          {activeAdminTab === 'crm' && (() => {
+            const filteredCustomers = customers.filter(c => {
+              const matchesSearch = 
+                c.name.toLowerCase().includes(crmSearchQuery.toLowerCase()) ||
+                c.email.toLowerCase().includes(crmSearchQuery.toLowerCase()) ||
+                (c.tags || '').toLowerCase().includes(crmSearchQuery.toLowerCase()) ||
+                c.id.toLowerCase().includes(crmSearchQuery.toLowerCase());
+                
+              const isBlack = c.isBlacklisted === 1 || (c.isBlacklisted as any) === true;
+              const matchesStatus = 
+                crmStatusFilter === 'all' ? true :
+                crmStatusFilter === 'blacklist' ? isBlack : !isBlack;
+                
+              return matchesSearch && matchesStatus;
+            });
 
-              <div className="admin-table-container">
-                <table className="admin-table">
-                  <thead>
-                    <tr>
-                      <th>顧客 ID</th>
-                      <th>姓名</th>
-                      <th>電子郵件</th>
-                      <th>註冊管道</th>
-                      <th>加入日期</th>
-                      <th>訂單數量</th>
-                      <th>累計消費額</th>
-                      <th>累積點數</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {customers.map(c => (
-                      <tr key={c.id}>
-                        <td style={{ fontFamily: 'monospace' }}>{c.id}</td>
-                        <td style={{ fontWeight: '600' }}>{c.name}</td>
-                        <td>{c.email}</td>
-                        <td>
-                          <span className={`badge ${c.provider === 'Google' ? 'badge-red' : 'badge-gold'}`} style={{ textTransform: 'none', fontSize: '0.65rem' }}>
-                            {c.provider} 登入
-                          </span>
-                        </td>
-                        <td>{c.signupDate}</td>
-                        <td style={{ textAlign: 'center' }}>{c.ordersCount} 筆</td>
-                        <td style={{ fontWeight: 'bold', color: 'var(--primary)' }}>NT$ {c.totalSpent.toLocaleString()}</td>
-                        <td>{c.points} 點</td>
+            return (
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                  <div>
+                    <h2 style={{ fontSize: '1.6rem', fontWeight: 700, margin: 0 }}>CRM 客戶管理與顧客資料</h2>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                      蒐集並管理透過 Google、LINE 或 Facebook 註冊的會員清單。支持累積點數、歷史交易總額追蹤，以及黑名單管理。
+                    </p>
+                  </div>
+                  <button 
+                    className="btn btn-primary" 
+                    onClick={handleOpenAddCustomer}
+                    style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', height: '42px', padding: '0 1.25rem', borderRadius: '8px' }}
+                  >
+                    <Plus size={16} /> 新增顧客
+                  </button>
+                </div>
+
+                {/* Search and Filter Row */}
+                <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+                  <div style={{ position: 'relative', flexGrow: 1, minWidth: '240px' }}>
+                    <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                    <input 
+                      type="text" 
+                      placeholder="搜尋顧客姓名、電子郵件、標籤或 ID..." 
+                      className="form-input search-input-with-icon" 
+                      style={{ paddingLeft: '38px', height: '42px', margin: 0 }}
+                      value={crmSearchQuery}
+                      onChange={(e) => setCrmSearchQuery(e.target.value)}
+                    />
+                  </div>
+                  <select 
+                    className="form-input" 
+                    style={{ width: '160px', height: '42px', margin: 0 }}
+                    value={crmStatusFilter}
+                    onChange={(e) => setCrmStatusFilter(e.target.value as any)}
+                  >
+                    <option value="all">全部狀態</option>
+                    <option value="normal">正常會員</option>
+                    <option value="blacklist">黑名單會員</option>
+                  </select>
+                </div>
+
+                <div className="admin-table-container">
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>顧客 ID</th>
+                        <th>姓名 / 標籤</th>
+                        <th>電子郵件</th>
+                        <th>註冊管道</th>
+                        <th>累積點數</th>
+                        <th>累計消費額</th>
+                        <th>狀態</th>
+                        <th style={{ textAlign: 'right' }}>操作</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {filteredCustomers.length === 0 ? (
+                        <tr>
+                          <td colSpan={8} style={{ textAlign: 'center', padding: '3rem 0', color: 'var(--text-muted)' }}>
+                            沒有找到符合條件的顧客資料。
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredCustomers.map(c => {
+                          const isBlack = c.isBlacklisted === 1 || (c.isBlacklisted as any) === true;
+                          return (
+                            <tr key={c.id} style={{ opacity: isBlack ? 0.65 : 1 }}>
+                              <td style={{ fontFamily: 'monospace', fontSize: '0.85rem' }}>{c.id}</td>
+                              <td>
+                                <div style={{ fontWeight: '600', color: isBlack ? 'var(--text-secondary)' : 'var(--text-primary)' }}>
+                                  {c.name}
+                                </div>
+                                {c.tags && (
+                                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', marginTop: '0.25rem' }}>
+                                    {c.tags.split(',').map((tag, idx) => (
+                                      <span key={idx} className="badge" style={{ fontSize: '0.6rem', padding: '1px 6px', background: '#e0f2fe', color: '#0369a1', borderColor: '#bae6fd', display: 'inline-flex', alignItems: 'center', gap: '2px', textTransform: 'none' }}>
+                                        <Tag size={10} /> {tag.trim()}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                              </td>
+                              <td>{c.email}</td>
+                              <td>
+                                <span className={`badge ${c.provider === 'Google' ? 'badge-red' : c.provider === 'LINE' ? 'badge-green' : 'badge-gold'}`} style={{ textTransform: 'none', fontSize: '0.65rem' }}>
+                                  {c.provider}
+                                </span>
+                              </td>
+                              <td>{c.points} 點</td>
+                              <td style={{ fontWeight: 'bold', color: 'var(--primary)' }}>NT$ {c.totalSpent.toLocaleString()}</td>
+                              <td>
+                                {isBlack ? (
+                                  <span className="badge badge-red" style={{ fontSize: '0.65rem', display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                                    <ShieldAlert size={10} /> 黑名單
+                                  </span>
+                                ) : (
+                                  <span className="badge badge-green" style={{ fontSize: '0.65rem' }}>
+                                    正常
+                                  </span>
+                                )}
+                              </td>
+                              <td style={{ textAlign: 'right' }}>
+                                <div style={{ display: 'inline-flex', gap: '0.5rem' }}>
+                                  <button 
+                                    className="portal-nav-btn" 
+                                    style={{ padding: '0.35rem', borderRadius: '4px', background: 'none', border: 'none', cursor: 'pointer' }}
+                                    title="編輯顧客"
+                                    onClick={() => handleOpenEditCustomer(c)}
+                                  >
+                                    <Edit size={14} style={{ color: 'var(--text-secondary)' }} />
+                                  </button>
+                                  <button 
+                                    className="portal-nav-btn" 
+                                    style={{ padding: '0.35rem', borderRadius: '4px', background: 'none', border: 'none', cursor: 'pointer' }}
+                                    title={isBlack ? "移出黑名單" : "列入黑名單"}
+                                    onClick={() => handleToggleBlacklist(c)}
+                                  >
+                                    {isBlack ? (
+                                      <UserCheck size={14} style={{ color: 'green' }} />
+                                    ) : (
+                                      <UserX size={14} style={{ color: 'red' }} />
+                                    )}
+                                  </button>
+                                  <button 
+                                    className="portal-nav-btn" 
+                                    style={{ padding: '0.35rem', borderRadius: '4px', background: 'none', border: 'none', cursor: 'pointer' }}
+                                    title="刪除顧客"
+                                    onClick={() => handleDeleteCustomer(c.id)}
+                                  >
+                                    <Trash2 size={14} style={{ color: 'red' }} />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Customer Add/Edit Modal */}
+                {isCustomerModalOpen && (
+                  <div className="woo-modal-overlay" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.65)', zIndex: 100000, padding: '1rem' }}>
+                    <div className="glass-panel" style={{ width: '100%', maxWidth: '540px', borderRadius: '16px', background: '#fff', border: '1px solid var(--border)', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.15)', maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                      
+                      {/* Fixed Header */}
+                      <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff' }}>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          <Users size={20} style={{ color: 'var(--primary)' }} />
+                          {editingCustomer ? '編輯顧客資料' : '手動新增顧客資料'}
+                        </h3>
+                        <button 
+                          type="button"
+                          onClick={() => setIsCustomerModalOpen(false)} 
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', padding: '4px' }}
+                        >
+                          <X size={20} />
+                        </button>
+                      </div>
+                      
+                      {/* Form */}
+                      <form onSubmit={handleSaveCustomer} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+                        {/* Scrollable Body */}
+                        <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem' }}>
+                          <div className="form-group" style={{ marginBottom: '1rem' }}>
+                            <label className="form-label" style={{ fontWeight: 600 }}>顧客姓名 <span style={{ color: 'red' }}>*</span></label>
+                            <input 
+                              type="text" 
+                              className="form-input" 
+                              value={customerForm.name}
+                              onChange={(e) => setCustomerForm({ ...customerForm, name: e.target.value })}
+                              required
+                            />
+                          </div>
+                          
+                          <div className="form-group" style={{ marginBottom: '1rem' }}>
+                            <label className="form-label" style={{ fontWeight: 600 }}>電子郵件 <span style={{ color: 'red' }}>*</span></label>
+                            <input 
+                              type="email" 
+                              className="form-input" 
+                              value={customerForm.email}
+                              onChange={(e) => setCustomerForm({ ...customerForm, email: e.target.value })}
+                              required
+                            />
+                          </div>
+
+                          <div className="form-group" style={{ marginBottom: '1rem' }}>
+                            <label className="form-label">註冊管道</label>
+                            <select 
+                              className="form-input" 
+                              value={customerForm.provider}
+                              onChange={(e) => setCustomerForm({ ...customerForm, provider: e.target.value })}
+                              style={{ appearance: 'auto' }}
+                            >
+                              <option value="Google">Google</option>
+                              <option value="LINE">LINE</option>
+                              <option value="Facebook">Facebook</option>
+                              <option value="Custom">手動新增</option>
+                            </select>
+                          </div>
+
+                          <div className="form-group" style={{ marginBottom: '1rem' }}>
+                            <label className="form-label">累積會員點數</label>
+                            <input 
+                              type="number" 
+                              className="form-input" 
+                              value={customerForm.points}
+                              onChange={(e) => setCustomerForm({ ...customerForm, points: parseInt(e.target.value) || 0 })}
+                            />
+                          </div>
+
+                          <div className="form-group" style={{ marginBottom: '1rem' }}>
+                            <label className="form-label">顧客標籤 (以英文逗號隔開)</label>
+                            <input 
+                              type="text" 
+                              placeholder="例如: VIP, 柴犬家長, 常溫配送" 
+                              className="form-input" 
+                              value={customerForm.tags}
+                              onChange={(e) => setCustomerForm({ ...customerForm, tags: e.target.value })}
+                            />
+                          </div>
+
+                          <div className="form-group" style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <input 
+                              type="checkbox" 
+                              id="isBlacklistedCheckbox"
+                              checked={customerForm.isBlacklisted}
+                              onChange={(e) => setCustomerForm({ ...customerForm, isBlacklisted: e.target.checked })}
+                              style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                            />
+                            <label htmlFor="isBlacklistedCheckbox" style={{ fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', color: customerForm.isBlacklisted ? 'red' : 'var(--text-primary)' }}>
+                              <ShieldAlert size={14} /> 列入黑名單 (黑名單用戶無法在前台進行結帳)
+                            </label>
+                          </div>
+                        </div>
+
+                        {/* Fixed Footer Actions */}
+                        <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'flex-end', gap: '1rem', background: '#fafafa' }}>
+                          <button 
+                            type="button" 
+                            className="btn btn-secondary" 
+                            onClick={() => setIsCustomerModalOpen(false)}
+                            style={{ height: '40px', padding: '0 1.25rem' }}
+                          >
+                            取消
+                          </button>
+                          <button 
+                            type="submit" 
+                            className="btn btn-primary"
+                            style={{ height: '40px', padding: '0 1.25rem' }}
+                          >
+                            儲存顧客資料
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* TAB 5: WEB CONTENT & BLOG MANAGEMENT */}
           {activeAdminTab === 'content' && (
@@ -1472,96 +2479,217 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     />
                   </div>
 
-                  <div className="form-group" style={{ marginBottom: '1rem' }}>
-                    <label className="form-label" style={{ fontWeight: 600 }}>首頁 Banner 主標題</label>
-                    <textarea 
-                      className="form-input"
-                      style={{ minHeight: '60px', fontFamily: 'inherit' }}
-                      value={heroTitle}
-                      onChange={(e) => setHeroTitle(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-                    <label className="form-label" style={{ fontWeight: 600 }}>首頁 Banner 背景大圖</label>
-                    
-                    {/* Toggle */}
-                    <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                  <div className="form-group" style={{ marginBottom: '1.5rem', background: '#f8fafc', padding: '1.25rem', borderRadius: '12px', border: '1px solid var(--border)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+                      <div style={{ flex: '1 1 240px' }}>
+                        <label className="form-label" style={{ fontWeight: 700, fontSize: '1rem', margin: 0, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                          <span>🖼️ 首頁多圖 Banner 輪播管理 (CRUD)</span>
+                        </label>
+                        <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '0.4rem', margin: 0, lineHeight: 1.4 }}>
+                          您可以為每張輪播圖個別新增/修改「主標題」、「副標題」、「按鈕內文字」與「背景圖片（支援本機上傳與網址）」。
+                        </p>
+                      </div>
                       <button
                         type="button"
-                        className={`category-btn ${bannerImageSource === 'local' ? 'active' : ''}`}
-                        onClick={() => setBannerImageSource('local')}
-                        style={{ flexGrow: 1, padding: '0.4rem', fontSize: '0.8rem', borderRadius: '4px' }}
+                        className="btn btn-primary"
+                        style={{ height: '36px', fontSize: '0.8rem', padding: '0 0.85rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', whiteSpace: 'nowrap', flexShrink: 0 }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          const newSlide = {
+                            id: 'slide-' + Date.now(),
+                            title: '新輪播標題\n高品質質感選品',
+                            desc: '簡短描述內文',
+                            img: '',
+                            btnText: '立即選購'
+                          };
+                          const updated = [...(heroSlides || []), newSlide];
+                          handleSaveHeroSlides(updated);
+                        }}
                       >
-                        從本機上傳
-                      </button>
-                      <button
-                        type="button"
-                        className={`category-btn ${bannerImageSource === 'url' ? 'active' : ''}`}
-                        onClick={() => setBannerImageSource('url')}
-                        style={{ flexGrow: 1, padding: '0.4rem', fontSize: '0.8rem', borderRadius: '4px' }}
-                      >
-                        外部圖片網址
+                        <Plus size={14} /> 新增輪播圖片
                       </button>
                     </div>
 
-                    {bannerImageSource === 'local' ? (
-                      <div className="image-upload-preview-area" style={{ minHeight: '140px' }}>
-                        {heroImage ? (
-                          <>
-                            <img src={heroImage} alt="Hero banner preview" style={{ maxHeight: '120px', objectFit: 'contain' }} />
-                            <button 
-                              type="button" 
-                              className="modal-close-btn"
-                              style={{ position: 'absolute', top: '8px', right: '8px', background: 'rgba(255,255,255,0.8)', border: 'none', borderRadius: '50%', width: '28px', height: '28px', cursor: 'pointer' }}
-                              onClick={() => setHeroImage('')}
-                            >
-                              <X size={14} />
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <Upload size={32} style={{ color: 'var(--text-muted)' }} />
-                            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>請拖曳大圖至此處上傳</p>
-                            <label className="image-upload-btn-label">
-                              選擇本地檔案
-                              <input 
-                                type="file" 
-                                accept="image/*" 
-                                style={{ display: 'none' }} 
-                                onChange={(e) => handleFileChange(e, 'hero')} 
-                              />
-                            </label>
-                          </>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="form-group">
-                        <label className="form-label" style={{ fontSize: '0.8rem' }}>貼上外部背景大圖 URL 網址</label>
-                        <input 
-                          type="text" 
-                          className="form-input" 
-                          placeholder="https://example.com/hero.jpg" 
-                          value={heroImage.startsWith('data:') ? '' : heroImage}
-                          onChange={(e) => setHeroImage(e.target.value)}
-                        />
-                        {heroImage && !heroImage.startsWith('data:') && (
-                          <div style={{ marginTop: '0.75rem', position: 'relative', height: '140px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border)' }}>
-                            <img src={heroImage} alt="URL Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                      {(heroSlides || []).map((slide, idx) => (
+                        <div 
+                          key={slide.id || idx}
+                          style={{ 
+                            background: '#fff', 
+                            border: '1px solid var(--border)', 
+                            borderRadius: '10px', 
+                            padding: '1.1rem',
+                            position: 'relative',
+                            boxShadow: '0 2px 5px rgba(0,0,0,0.02)'
+                          }}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.85rem', borderBottom: '1px dashed #e2e8f0', paddingBottom: '0.6rem' }}>
+                            <span style={{ fontWeight: 700, fontSize: '0.88rem', color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                              <span>輪播卡片 #{idx + 1}</span>
+                              {idx === 0 && <span style={{ fontSize: '0.68rem', background: '#dbeafe', color: '#1e40af', padding: '0.1rem 0.4rem', borderRadius: '4px' }}>預設首頁</span>}
+                            </span>
+                            <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                              <button
+                                type="button"
+                                className="btn btn-secondary"
+                                style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
+                                disabled={idx === 0}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  if (idx === 0) return;
+                                  const updated = [...heroSlides];
+                                  const temp = updated[idx];
+                                  updated[idx] = updated[idx - 1];
+                                  updated[idx - 1] = temp;
+                                  handleSaveHeroSlides(updated);
+                                }}
+                              >
+                                ▲ 上移
+                              </button>
+                              <button
+                                type="button"
+                                className="btn btn-secondary"
+                                style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
+                                disabled={idx === heroSlides.length - 1}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  if (idx === heroSlides.length - 1) return;
+                                  const updated = [...heroSlides];
+                                  const temp = updated[idx];
+                                  updated[idx] = updated[idx + 1];
+                                  updated[idx + 1] = temp;
+                                  handleSaveHeroSlides(updated);
+                                }}
+                              >
+                                ▼ 下移
+                              </button>
+                              <button
+                                type="button"
+                                style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '0.3rem', display: 'flex', alignItems: 'center' }}
+                                title="刪除此張輪播圖"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  if (heroSlides.length <= 1) {
+                                    alert('首頁最少需保留一張輪播圖！');
+                                    return;
+                                  }
+                                  if (confirm(`確定要刪除第 #${idx + 1} 張輪播圖嗎？`)) {
+                                    const updated = heroSlides.filter((_, i) => i !== idx);
+                                    handleSaveHeroSlides(updated);
+                                  }
+                                }}
+                              >
+                                <Trash2 size={15} />
+                              </button>
+                            </div>
                           </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
 
-                  <div className="form-group" style={{ marginBottom: '1rem' }}>
-                    <label className="form-label" style={{ fontWeight: 600 }}>首頁 Banner 按鈕文字</label>
-                    <input 
-                      type="text" 
-                      className="form-input"
-                      value={bannerBtnText}
-                      onChange={(e) => setBannerBtnText(e.target.value)}
-                    />
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.85rem', marginBottom: '0.85rem' }}>
+                            <div>
+                              <label className="form-label" style={{ fontSize: '0.78rem', fontWeight: 600 }}>主標題 (可用 \n 換行)</label>
+                              <textarea
+                                className="form-input"
+                                style={{ minHeight: '52px', fontSize: '0.85rem', fontFamily: 'inherit', margin: 0 }}
+                                value={slide.title}
+                                onChange={(e) => {
+                                  const updated = [...heroSlides];
+                                  updated[idx].title = e.target.value;
+                                  handleSaveHeroSlides(updated);
+                                  if (idx === 0) setHeroTitle(e.target.value);
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <label className="form-label" style={{ fontSize: '0.78rem', fontWeight: 600 }}>副標題說明描述</label>
+                              <textarea
+                                className="form-input"
+                                style={{ minHeight: '52px', fontSize: '0.85rem', fontFamily: 'inherit', margin: 0 }}
+                                value={slide.desc}
+                                onChange={(e) => {
+                                  const updated = [...heroSlides];
+                                  updated[idx].desc = e.target.value;
+                                  handleSaveHeroSlides(updated);
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.3fr', gap: '0.85rem' }}>
+                            <div>
+                              <label className="form-label" style={{ fontSize: '0.78rem', fontWeight: 600 }}>按鈕顯示文字</label>
+                              <input
+                                type="text"
+                                className="form-input"
+                                style={{ height: '36px', fontSize: '0.85rem', margin: 0 }}
+                                value={slide.btnText}
+                                onChange={(e) => {
+                                  const updated = [...heroSlides];
+                                  updated[idx].btnText = e.target.value;
+                                  handleSaveHeroSlides(updated);
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <label className="form-label" style={{ fontSize: '0.78rem', fontWeight: 600 }}>背景大圖 (本機選擇 或 貼網址)</label>
+                              <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '0.4rem' }}>
+                                <label className="btn btn-secondary" style={{ padding: '0.2rem 0.5rem', fontSize: '0.72rem', height: '28px', display: 'inline-flex', alignItems: 'center', gap: '0.2rem', cursor: 'pointer', margin: 0 }}>
+                                  <Upload size={12} /> 本機上傳圖片
+                                  <input 
+                                    type="file" 
+                                    accept="image/*" 
+                                    style={{ display: 'none' }} 
+                                    onChange={(e) => {
+                                      const file = e.target.files?.[0];
+                                      if (file) {
+                                        const reader = new FileReader();
+                                        reader.onloadend = () => {
+                                          const base64 = reader.result as string;
+                                          const updated = [...heroSlides];
+                                          updated[idx].img = base64;
+                                          handleSaveHeroSlides(updated);
+                                        };
+                                        reader.readAsDataURL(file);
+                                      }
+                                    }} 
+                                  />
+                                </label>
+                              </div>
+                              <input
+                                type="text"
+                                className="form-input"
+                                placeholder="或輸入外部圖片網址 (https://...)"
+                                style={{ height: '34px', fontSize: '0.82rem', margin: 0 }}
+                                value={slide.img && slide.img.startsWith('data:') ? '【已上傳本機圖片】' : slide.img}
+                                onChange={(e) => {
+                                  const updated = [...heroSlides];
+                                  updated[idx].img = e.target.value;
+                                  handleSaveHeroSlides(updated);
+                                }}
+                              />
+                              {slide.img && (
+                                <div style={{ marginTop: '0.5rem', position: 'relative', height: '70px', borderRadius: '6px', overflow: 'hidden', border: '1px solid var(--border)' }}>
+                                  <img src={slide.img} alt={`Preview #${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                  <button 
+                                    type="button" 
+                                    style={{ position: 'absolute', top: '4px', right: '4px', background: 'rgba(0,0,0,0.65)', color: '#fff', border: 'none', borderRadius: '50%', width: '20px', height: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                    title="移除圖片"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      const updated = [...heroSlides];
+                                      updated[idx].img = '';
+                                      handleSaveHeroSlides(updated);
+                                    }}
+                                  >
+                                    <X size={12} />
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   <div className="form-group-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
@@ -1891,7 +3019,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                             <button 
                               type="button" 
                               className="btn btn-primary"
-                              style={{ padding: '0 0.5rem', height: '30px', fontSize: '0.75rem' }}
+                              style={{ padding: '0 0.6rem', height: '30px', fontSize: '0.75rem', whiteSpace: 'nowrap', flexShrink: 0 }}
                               onClick={() => {
                                 if (editingNavName.trim()) {
                                   editNavItemName(item.id, editingNavName.trim());
@@ -1904,7 +3032,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                             <button 
                               type="button" 
                               className="btn btn-secondary"
-                              style={{ padding: '0 0.5rem', height: '30px', fontSize: '0.75rem' }}
+                              style={{ padding: '0 0.6rem', height: '30px', fontSize: '0.75rem', whiteSpace: 'nowrap', flexShrink: 0 }}
                               onClick={() => setEditingNavId(null)}
                             >
                               取消

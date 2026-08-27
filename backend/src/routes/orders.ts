@@ -48,6 +48,13 @@ router.post('/', async (req, res) => {
   const status = paymentType === 'GreenWorld' ? '待付款' : '處理中 / 質感宅配';
 
   try {
+    if (shippingInfo.email) {
+      const customer = await db.get('SELECT * FROM customers WHERE email = ?', [shippingInfo.email]);
+      if (customer && customer.isBlacklisted === 1) {
+        return res.status(403).json({ error: '此電子郵件已被列入黑名單，無法進行下單。如有疑問請聯絡客服。' });
+      }
+    }
+
     await db.run(
       `INSERT INTO orders (
         id, date, items, total, status, shippingName, shippingPhone, shippingAddress, shippingEmail, paymentType,
@@ -61,10 +68,36 @@ router.post('/', async (req, res) => {
       ]
     );
 
-    // Update customer order count and total spent (Loyalty points are disabled as requested)
+    // Auto-register Guest user if customer does not exist & send verification trigger
     if (shippingInfo.email) {
-      const customer = await db.get('SELECT * FROM customers WHERE email = ?', [shippingInfo.email]);
-      if (customer) {
+      let customer = await db.get('SELECT * FROM customers WHERE email = ?', [shippingInfo.email]);
+      if (!customer) {
+        const custId = `CUST-${Date.now().toString().slice(-6)}`;
+        const signupDate = dateStr;
+        await db.run(
+          `INSERT INTO customers (id, name, email, phone, address, provider, signupDate, ordersCount, totalSpent, points, tags, isBlacklisted)
+           VALUES (?, ?, ?, ?, ?, 'GuestCheckout', ?, 1, ?, 0, '訪客自動註冊', 0)`,
+          [
+            custId, 
+            shippingInfo.name || '訪客買家', 
+            shippingInfo.email, 
+            shippingInfo.phone || '', 
+            shippingInfo.address || '', 
+            signupDate, 
+            Number(total)
+          ]
+        );
+        
+        // Generate OTP for email verification and password setup
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const expiresAt = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
+        await db.run(
+          'INSERT OR REPLACE INTO email_otps (email, otp, expiresAt) VALUES (?, ?, ?)',
+          [shippingInfo.email, otp, expiresAt]
+        );
+
+        console.log(`[GUEST CHECKOUT AUTO-REGISTER] Registered customer ${shippingInfo.email} with ID ${custId}. Generated verification OTP: ${otp}`);
+      } else {
         await db.run(
           `UPDATE customers SET 
             ordersCount = ordersCount + 1, 
@@ -115,27 +148,108 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update order status (Admin only)
+// Edit order (Admin only)
 router.put('/:id', authenticateAdmin, async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params;
-  const { status } = req.body;
-
-  if (!status) {
-    return res.status(400).json({ error: 'Status is required' });
-  }
+  const { 
+    items, total, status, 
+    shippingName, shippingPhone, shippingAddress, shippingEmail, 
+    paymentType, logisticsType, logisticsSubType, cvsStoreID, cvsStoreName, 
+    couponCode, discountAmount 
+  } = req.body;
 
   try {
     const db = await getDatabase();
-    const existing = await db.get('SELECT id FROM orders WHERE id = ?', [id]);
+    const existing = await db.get('SELECT * FROM orders WHERE id = ?', [id]);
     if (!existing) {
       return res.status(404).json({ error: 'Order not found' });
     }
 
-    await db.run('UPDATE orders SET status = ? WHERE id = ?', [status, id]);
-    return res.json({ success: true, message: `Order ${id} status updated to: ${status}` });
+    const oldEmail = existing.shippingEmail;
+    const oldTotal = existing.total;
+
+    // Perform UPDATE
+    await db.run(
+      `UPDATE orders SET 
+        items = ?, total = ?, status = ?, 
+        shippingName = ?, shippingPhone = ?, shippingAddress = ?, shippingEmail = ?, 
+        paymentType = ?, logisticsType = ?, logisticsSubType = ?, cvsStoreID = ?, cvsStoreName = ?, 
+        couponCode = ?, discountAmount = ?
+       WHERE id = ?`,
+      [
+        JSON.stringify(items || []), Number(total) || 0, status || existing.status,
+        shippingName || '', shippingPhone || '', shippingAddress || '', shippingEmail || '',
+        paymentType || '', logisticsType || 'HOME', logisticsSubType || 'TCAT', cvsStoreID || null, cvsStoreName || null,
+        couponCode || null, Number(discountAmount) || 0, id
+      ]
+    );
+
+    // Adjust customer totalSpent if email changed or total changed
+    if (oldEmail && oldEmail === shippingEmail) {
+      const diff = Number(total) - Number(oldTotal);
+      if (diff !== 0) {
+        await db.run(
+          'UPDATE customers SET totalSpent = totalSpent + ? WHERE email = ?',
+          [diff, oldEmail]
+        );
+      }
+    } else {
+      // Email changed: deduct from old customer, add to new customer
+      if (oldEmail) {
+        await db.run(
+          'UPDATE customers SET ordersCount = MAX(0, ordersCount - 1), totalSpent = MAX(0, totalSpent - ?) WHERE email = ?',
+          [Number(oldTotal), oldEmail]
+        );
+      }
+      if (shippingEmail) {
+        const newCust = await db.get('SELECT * FROM customers WHERE email = ?', [shippingEmail]);
+        if (newCust) {
+          await db.run(
+            'UPDATE customers SET ordersCount = ordersCount + 1, totalSpent = totalSpent + ? WHERE email = ?',
+            [Number(total), shippingEmail]
+          );
+        }
+      }
+    }
+
+    return res.json({ success: true, message: `Order ${id} updated successfully` });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: 'Failed to update order status' });
+    return res.status(500).json({ error: 'Failed to update order' });
+  }
+});
+
+// Delete order (Admin only)
+router.delete('/:id', authenticateAdmin, async (req: AuthenticatedRequest, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const db = await getDatabase();
+    const existing = await db.get('SELECT * FROM orders WHERE id = ?', [id]);
+    if (!existing) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    const { shippingEmail, total } = existing;
+
+    // Delete order
+    await db.run('DELETE FROM orders WHERE id = ?', [id]);
+
+    // Update customer stats
+    if (shippingEmail) {
+      await db.run(
+        `UPDATE customers SET 
+          ordersCount = MAX(0, ordersCount - 1), 
+          totalSpent = MAX(0, totalSpent - ?) 
+         WHERE email = ?`,
+        [Number(total), shippingEmail]
+      );
+    }
+
+    return res.json({ success: true, message: `Order ${id} deleted successfully` });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Failed to delete order' });
   }
 });
 

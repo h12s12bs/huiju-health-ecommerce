@@ -58,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <img 
               src={appLogo} 
-              alt="Lè Ròu Logo" 
+              alt="慧聚健康 Logo" 
               style={{ height: '80px', width: '80px', borderRadius: '16px', objectFit: 'cover', border: '1px solid var(--border)', transition: 'all 0.3s' }} 
             />
           </a>

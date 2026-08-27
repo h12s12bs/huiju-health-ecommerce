@@ -44,6 +44,7 @@ export interface Product {
   dimensions?: string;
   stock?: number;
   isPreOrder?: boolean;
+  cost?: number;
 }
 
 interface CartItem {
@@ -81,6 +82,8 @@ export interface Customer {
   ordersCount: number;
   totalSpent: number;
   points: number;
+  tags?: string;
+  isBlacklisted?: number;
 }
 
 const DEFAULT_RECIPES = [
@@ -118,6 +121,29 @@ function App() {
   const [heroTitle, setHeroTitle] = useState('質感大地色系美與實用兼顧\n與毛孩共居的舒適日常');
   const [heroDesc, setHeroDesc] = useState('以樂樂與肉肉的溫暖毛色為設計靈感。我們只為愛犬嚴選優質設計款機能服飾、散步小用品與抗焦慮玩具。用最有溫度的美學，疼愛您的毛寶貝。');
   const [heroImage, setHeroImage] = useState('');
+  const [heroSlides, setHeroSlides] = useState<Array<{ id: string; title: string; desc: string; img: string; btnText: string }>>([
+    {
+      id: 'slide-1',
+      title: '質感大地色系美與實用兼顧\n與毛孩共居的舒適日常',
+      desc: '以樂樂與肉肉的溫暖毛色為設計靈感。我們只為愛犬嚴選優質設計款機能服飾、散步小用品與抗焦慮玩具。',
+      img: '',
+      btnText: '探索樂肉精選'
+    },
+    {
+      id: 'slide-2',
+      title: '職人手工雙針雙線\n義大利植鞣牛皮牽繩',
+      desc: '經年累月的溫潤皮革焦糖色澤，專為中大型毛孩設計。',
+      img: '',
+      btnText: '查看植鞣選品'
+    },
+    {
+      id: 'slide-3',
+      title: '舒緩分離焦慮\n天然藏食嗅聞益智玩具',
+      desc: '健康消耗毛孩多餘精力與壓力，提升嗅覺專注力。',
+      img: '',
+      btnText: '選購紓壓玩具'
+    }
+  ]);
   const [blogArticles, setBlogArticles] = useState<any[]>(DEFAULT_RECIPES);
   const [customCategories, setCustomCategories] = useState<Array<{ id: string; name: string }>>([
     { id: 'apparel', name: '毛孩服飾' },
@@ -219,7 +245,7 @@ function App() {
 
   // Fetch products from backend
   const fetchProducts = () => {
-    fetch(`${BACKEND_URL}/api/products`)
+    fetch(`${BACKEND_URL}/api/products?t=${Date.now()}`)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
@@ -231,7 +257,7 @@ function App() {
 
   // Fetch Homepage and integration settings
   const fetchSettings = () => {
-    fetch(`${BACKEND_URL}/api/auth/settings`)
+    fetch(`${BACKEND_URL}/api/auth/settings?t=${Date.now()}`)
       .then(res => res.json())
       .then(data => {
         if (data && !data.error) {
@@ -239,6 +265,13 @@ function App() {
           if (data.heroTitle) setHeroTitle(data.heroTitle);
           if (data.heroDesc) setHeroDesc(data.heroDesc);
           if (data.heroImage) setHeroImage(data.heroImage);
+          if (data.heroSlides) {
+            try {
+              setHeroSlides(JSON.parse(data.heroSlides));
+            } catch (e) {
+              console.error("Failed to parse heroSlides", e);
+            }
+          }
           if (data.blogArticles) {
             try {
               setBlogArticles(JSON.parse(data.blogArticles));
@@ -368,7 +401,7 @@ function App() {
     const token = localStorage.getItem('adminToken');
     const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
 
-    fetch(`${BACKEND_URL}/api/orders`, { headers })
+    fetch(`${BACKEND_URL}/api/orders?t=${Date.now()}`, { headers })
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) setOrders(data);
@@ -376,20 +409,23 @@ function App() {
       .catch(err => console.error("Failed to fetch orders", err));
   };
 
-  // Fetch admin-protected data when admin mode is activated
-  useEffect(() => {
-    if (!isAdminMode) return;
-    fetchOrders();
-
+  const fetchCustomers = () => {
     const token = localStorage.getItem('adminToken');
     const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
     // Fetch Customers
-    fetch(`${BACKEND_URL}/api/customers`, { headers })
+    fetch(`${BACKEND_URL}/api/customers?t=${Date.now()}`, { headers })
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) setCustomers(data);
       })
       .catch(err => console.error("Failed to fetch customers", err));
+  };
+
+  // Fetch admin-protected data when admin mode is activated
+  useEffect(() => {
+    if (!isAdminMode) return;
+    fetchOrders();
+    fetchCustomers();
   }, [isAdminMode]);
 
   // Scroll to top on page navigation
@@ -507,7 +543,7 @@ function App() {
       }
     } catch (e) {
       console.error(e);
-      alert('連線失敗');
+      alert('連線失敗: ' + (e instanceof Error ? e.message : String(e)));
       return false;
     }
   };
@@ -968,6 +1004,7 @@ function App() {
             integrationKeys={integrationKeys}
             setIntegrationKeys={setIntegrationKeys}
             refreshOrders={fetchOrders}
+            refreshCustomers={fetchCustomers}
             saveSettings={saveSettings}
             announcementText={announcementText}
             setAnnouncementText={setAnnouncementText}
@@ -976,6 +1013,8 @@ function App() {
             heroDesc={heroDesc}
             heroImage={heroImage}
             setHeroImage={setHeroImage}
+            heroSlides={heroSlides}
+            setHeroSlides={setHeroSlides}
             blogArticles={blogArticles}
             setPrintingOrder={setPrintingOrder}
             appLogo={appLogo}
@@ -1006,6 +1045,7 @@ function App() {
                 petFood={petFood}
                 heroTitle={heroTitle}
                 heroImage={heroImage}
+                heroSlides={heroSlides}
                 products={products}
                 setCurrentPage={setCurrentPage}
                 setCategory={setCategory}
@@ -1194,27 +1234,27 @@ function App() {
         <div className="container">
           <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2.5rem', marginBottom: '3rem' }}>
               <span className="footer-logo" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.4rem', fontWeight: 'bold', fontFamily: 'var(--font-serif)', color: 'var(--text-primary)' }}>
-                <img src={appLogo} alt="Lè Ròu Logo" style={{ height: '60px', width: '60px', borderRadius: '12px', objectFit: 'cover', border: '1px solid var(--border)' }} />
-                <span>樂肉選品 <span style={{ whiteSpace: 'nowrap' }}>Lè Rou</span></span>
+                <img src={appLogo} alt="慧聚健康 Logo" style={{ height: '60px', width: '60px', borderRadius: '12px', objectFit: 'cover', border: '1px solid var(--border)' }} />
+                <span>慧聚健康 <span style={{ whiteSpace: 'nowrap' }}>Huiju Health</span></span>
               </span>
               <p className="footer-desc" style={{ marginTop: '1rem', fontSize: '0.9rem', lineHeight: 1.6, color: 'var(--text-secondary)' }}>
-                專門為毛孩打造的精緻生活美學選物店。以樂樂與肉肉的真實使用體驗，嚴選合身機能服飾、高規散步小配件與高品質外出用品。
+                專門為您與家人打造的精緻健康與養生選物店。嚴選頂級天然保健品、生醫產品與品質生活護理用品。
               </p>
 
             <div className="footer-links-col">
-              <h4 className="footer-title" style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1.25rem' }}>毛孩精品</h4>
+              <h4 className="footer-title" style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1.25rem' }}>健康精品</h4>
               <ul className="footer-links" style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('shop'); setCategory('apparel'); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>機能防風雨衣</a></li>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('shop'); setCategory('apparel'); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>針織雙色毛衣</a></li>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('shop'); setCategory('accessories'); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>手作皮革牽繩</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('shop'); setCategory('apparel'); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>天然營養補充</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('shop'); setCategory('apparel'); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>草本養生調理</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('shop'); setCategory('accessories'); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>個人健康護理</a></li>
               </ul>
             </div>
 
             <div className="footer-links-col">
-              <h4 className="footer-title" style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1.25rem' }}>美學生活誌</h4>
+              <h4 className="footer-title" style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1.25rem' }}>健康專欄</h4>
               <ul className="footer-links" style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('blog'); setSelectedPost(null); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>雨衣選購指南</a></li>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('blog'); setSelectedPost(null); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>職人皮革保養</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('blog'); setSelectedPost(null); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>保健品選購指南</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('blog'); setSelectedPost(null); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>日常養生須知</a></li>
                 <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('portal'); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>會員點數機制</a></li>
                 <li><a href="#doc" onClick={(e) => { e.preventDefault(); setFooterDoc('returns'); }} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}><ArrowLeftRight size={14} /> 退換貨政策</a></li>
               </ul>
@@ -1222,7 +1262,7 @@ function App() {
           </div>
 
           <div className="footer-bottom" style={{ borderTop: '1px solid var(--border)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            <p>&copy; 2026 樂肉選品 Lè Rou. All rights reserved. Inspired by Lè Lè & Ròu Ròu.</p>
+            <p>&copy; 2026 慧聚健康 Huiju Health. All rights reserved.</p>
             <div style={{ display: 'flex', gap: '1.5rem' }}>
               <a href="#doc" onClick={(e) => { e.preventDefault(); setFooterDoc('privacy'); }} style={{ color: 'var(--text-muted)' }}>隱私權政策</a>
               <a href="#doc" onClick={(e) => { e.preventDefault(); setFooterDoc('returns'); }} style={{ color: 'var(--text-muted)' }}>服務條款</a>
@@ -1246,9 +1286,9 @@ function App() {
 
             {authMode === 'login' ? (
               <div style={{ padding: '2.5rem', textAlign: 'center' }}>
-                <img src={appLogo} alt="Lè Ròu Logo" style={{ height: '80px', width: '80px', borderRadius: '16px', objectFit: 'cover', border: '1px solid var(--border)', marginBottom: '1.5rem' }} />
+                <img src={appLogo} alt="慧聚健康 Logo" style={{ height: '80px', width: '80px', borderRadius: '16px', objectFit: 'cover', border: '1px solid var(--border)', marginBottom: '1.5rem' }} />
                 <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', marginBottom: '0.5rem' }}>會員登入</h2>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '2rem' }}>登入後即可享有「樂肉選品」會員特權與消費點數累計</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '2rem' }}>登入後即可享有「慧聚健康」會員特權與消費點數累計</p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   <button 

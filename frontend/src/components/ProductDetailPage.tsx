@@ -256,6 +256,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   addToCart(product, qty);
                   setIsCartOpen(true);
                 }}
+              >
+                <ShoppingBag size={18} />
+                {isOutOfStock ? (isPreOrder ? '立即預購' : '已售完') : '加入購物車'}
               </button>
             </div>
 
