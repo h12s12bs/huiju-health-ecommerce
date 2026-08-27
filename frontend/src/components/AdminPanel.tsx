@@ -1133,7 +1133,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 <div>
                   <h2 style={{ fontSize: '1.6rem', fontWeight: 700, margin: 0 }}>訂單出貨與撿貨清單管理</h2>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                    追蹤全站毛孩產品的訂單，支持修改物流狀態，並可直接預覽列印出貨撿貨單（Packing Slip）隨箱派送。
+                    追蹤全站慧聚健康產品的訂單，支持修改物流狀態，並可直接預覽列印出貨撿貨單（Packing Slip）隨箱派送。
                   </p>
                 </div>
                 <button 
@@ -2140,7 +2140,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                             </td>
                             <td style={{ fontWeight: '600' }}>{p.title}</td>
                             <td>
-                              {p.category === 'apparel' ? '毛孩服飾' : p.category === 'accessories' ? '精選配件' : p.category === 'outing' ? '外出用品' : p.category === 'toys' ? '紓壓玩具' : '精緻選物'}
+                              {p.category === 'apparel' ? '核心保健' : p.category === 'accessories' ? '個人護理' : p.category === 'outing' ? '順暢消化' : '健康商品'}
                             </td>
                             <td>{p.brand}</td>
                             <td style={{ color: 'var(--primary)', fontWeight: 'bold' }}>NT$ {p.price.toLocaleString()}</td>
@@ -2818,7 +2818,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                             <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.25)' }}></div>
                             <div style={{ position: 'relative', zIndex: 2, maxWidth: '80%' }}>
                               <h4 style={{ fontSize: '0.8rem', color: '#fff', margin: '0 0 6px', fontFamily: 'var(--font-serif)', whiteSpace: 'pre-line', lineHeight: 1.2 }}>
-                                {heroTitle || '樂肉選品\n與毛孩共居的質感生活'}
+                                {heroTitle || '慧聚健康\n守護全家人的健康生活'}
                               </h4>
                               <button style={{ pointerEvents: 'none', background: 'var(--primary)', border: 'none', color: '#fff', fontSize: '0.5rem', padding: '2px 6px', borderRadius: '20px' }}>
                                 {bannerBtnText || '探索全系列選物'} &rarr;
@@ -2982,7 +2982,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   <textarea 
                     className="form-input"
                     style={{ minHeight: '80px', fontFamily: 'inherit', fontSize: '0.85rem' }}
-                    defaultValue="專門為毛孩打造的精緻生活美學選物店。以樂樂與肉肉的真實使用體驗，嚴選合身機能服飾、高規散步小配件與高品質外出用品。"
+                    defaultValue="專門為您與全家健康打造的慧聚健康。嚴選頂級深海魚油、游離型葉黃素與專利百億益生菌，守護您的全方位健康。"
                     placeholder="輸入品牌簡介文字，將顯示在頁尾 Footer 區域..."
                   />
                 </div>

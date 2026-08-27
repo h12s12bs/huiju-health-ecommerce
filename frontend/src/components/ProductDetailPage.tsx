@@ -72,7 +72,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           <div className="detail-body">
             <div className="detail-header">
               <span className="product-category" style={{ fontSize: '0.85rem', color: 'var(--primary)', fontWeight: 600 }}>
-                {product.brand || 'Lè Rou'} &middot; {product.category === 'apparel' ? '毛孩服飾' : product.category === 'accessories' ? '精選配件' : product.category === 'outing' ? '外出用品' : product.category === 'toys' ? '舒壓玩具' : '精緻選物'}
+                {(product.brand && product.brand !== 'Lè Rou' && product.brand !== 'Lè Lè Design' && product.brand !== 'Ròu Ròu Selection') ? product.brand : '慧聚健康'} &middot; {product.category === 'apparel' ? '核心保健' : product.category === 'accessories' ? '個人護理' : product.category === 'outing' ? '順暢消化' : '健康商品'}
               </span>
               
               <h1 className="detail-title" style={{ fontSize: '1.8rem', fontWeight: 700, margin: '0.5rem 0 1rem', color: 'var(--text-primary)', fontFamily: 'var(--font-serif)' }}>

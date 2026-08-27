@@ -60,7 +60,7 @@ export const HomePage: React.FC<HomePageProps> = ({
     { 
       img: petFood, 
       title: '舒緩分離焦慮\n天然藏食嗅聞益智玩具',
-      desc: '健康消耗毛孩多餘精力與壓力',
+      desc: '維護消化道機能與調節體質',
       btnText: '選購紓壓玩具'
     }
   ];

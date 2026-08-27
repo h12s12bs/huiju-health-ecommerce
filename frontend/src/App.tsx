@@ -154,19 +154,19 @@ function App() {
     { id: 'toys', name: '紓壓玩具' }
   ]);
   const [customBrands, setCustomBrands] = useState<Array<{ id: string; name: string }>>([
-    { id: 'brand-lele', name: 'Lè Lè Design' },
-    { id: 'brand-rourou', name: 'Ròu Ròu Selection' },
-    { id: 'brand-wildearth', name: 'Wild Earth' }
+    { id: 'brand-huiju-health', name: '慧聚健康 (Huiju Health)' },
+    { id: 'brand-huiju-labs', name: '慧聚研發 (Huiju Labs)' },
+    { id: 'brand-herbacare', name: 'HerbaCare 專利草本' }
   ]);
   const [navItems, setNavItems] = useState<Array<{ id: string; name: string; category?: string; page?: string }>>([
-    { id: 'nav-new', name: '新品推薦', category: 'new', page: 'shop' },
-    { id: 'nav-apparel', name: '毛孩服飾', category: 'apparel', page: 'shop' },
-    { id: 'nav-accessories', name: '精選配件', category: 'accessories', page: 'shop' },
-    { id: 'nav-outing', name: '外出用品', category: 'outing', page: 'shop' },
-    { id: 'nav-brands', name: '精選品牌', page: 'brands' },
-    { id: 'nav-blog', name: '部落格分享', page: 'blog' }
+    { id: 'nav-new', name: '熱銷推薦', category: 'new', page: 'shop' },
+    { id: 'nav-apparel', name: '核心保健', category: 'apparel', page: 'shop' },
+    { id: 'nav-accessories', name: '個人護理', category: 'accessories', page: 'shop' },
+    { id: 'nav-outing', name: '順暢消化', category: 'outing', page: 'shop' },
+    { id: 'nav-brands', name: '品牌專區', page: 'brands' },
+    { id: 'nav-blog', name: '健康專欄', page: 'blog' }
   ]);
-  const [bannerBtnText, setBannerBtnText] = useState('探索全系列選物');
+  const [bannerBtnText, setBannerBtnText] = useState('探索慧聚健康全系列');
   const [layoutOrder, setLayoutOrder] = useState<string[]>(['banner', 'products', 'instagram']);
   const [instagramUrl, setInstagramUrl] = useState('https://instagram.com');
   const [lineUrl, setLineUrl] = useState('https://line.me');
@@ -469,7 +469,7 @@ function App() {
 
   // Delete product on backend
   const deleteProduct = async (id: string) => {
-    if (confirm('確定要下架此毛孩選物商品嗎？')) {
+    if (confirm('確定要下架此商品嗎？')) {
       const token = localStorage.getItem('adminToken');
       try {
         const res = await fetch(`${BACKEND_URL}/api/products/${id}`, {
@@ -513,7 +513,7 @@ function App() {
           alert('商品修改成功！');
         } else {
           setProducts([...products, savedProd]);
-          alert('全新毛孩選物商品上架成功！');
+          alert('全新商品上架成功！');
         }
       } else {
         const err = await res.json();
@@ -636,8 +636,8 @@ function App() {
   const handleSocialLogin = (provider: 'Google' | 'LINE' | 'Facebook') => {
     setIsLoggedIn(true);
     const mockUser = {
-      name: provider === 'Google' ? '毛孩家長阿亮' : provider === 'LINE' ? '樂肉選品忠實會員' : '毛媽亮亮',
-      email: `${provider.toLowerCase()}User@lerou.com`,
+      name: provider === 'Google' ? '會員王先生' : provider === 'LINE' ? '慧聚健康忠實會員' : '會員張小姐',
+      email: `${provider.toLowerCase()}User@huiju-health.com`,
       provider
     };
     setCurrentUser(mockUser);
@@ -1140,7 +1140,7 @@ function App() {
 
                           <div className="product-info">
                             <span className="product-category">
-                              {product.brand} &middot; {product.category === 'apparel' ? '毛孩服飾' : product.category === 'accessories' ? '精選配件' : product.category === 'outing' ? '外出用品' : product.category === 'toys' ? '紓壓玩具' : '精選選物'}
+                              {(product.brand && product.brand !== 'Lè Lè Design' && product.brand !== 'Ròu Ròu Selection' && product.brand !== 'Wild Earth') ? product.brand : '慧聚健康'} &middot; {product.category === 'apparel' ? '核心保健' : product.category === 'accessories' ? '個人護理' : product.category === 'outing' ? '順暢消化' : '健康商品'}
                             </span>
                             <h3 className="product-title">{product.title}</h3>
                             
@@ -1240,7 +1240,7 @@ function App() {
                 <span>慧聚健康 <span style={{ whiteSpace: 'nowrap' }}>Huiju Health</span></span>
               </span>
               <p className="footer-desc" style={{ marginTop: '1rem', fontSize: '0.9rem', lineHeight: 1.6, color: 'var(--text-secondary)' }}>
-                專門為您與家人打造的精緻健康與養生選物店。嚴選頂級天然保健品、生醫產品與品質生活護理用品。
+                專門為您與全家健康打造的慧聚健康。嚴選頂級深海魚油、游離型葉黃素與專利百億益生菌，守護您的全方位健康。
               </p>
 
             <div className="footer-links-col">
