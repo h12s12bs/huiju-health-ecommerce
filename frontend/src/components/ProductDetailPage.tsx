@@ -62,10 +62,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         <div className="product-detail-grid" style={{ background: 'var(--bg-glass)', borderRadius: '16px', border: '1px solid var(--border)', padding: '2.5rem', marginBottom: '4rem' }}>
           <div className="detail-gallery" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <img 
-              src={product.image} 
+              src={(product.image && !product.image.includes('pet_') && !product.image.includes('dog_') && !product.image.includes('cat_')) ? product.image : '/assets/logo.jpg'} 
               alt={product.title} 
               className="detail-img" 
-              style={{ width: '100%', maxHeight: '480px', objectFit: 'cover', borderRadius: '12px', border: '1px solid var(--border)' }} 
+              style={{ width: '100%', maxHeight: '480px', objectFit: 'contain', borderRadius: '12px', border: '1px solid var(--border)', background: 'var(--bg-secondary)', padding: '1.5rem' }} 
             />
           </div>
 

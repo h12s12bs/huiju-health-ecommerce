@@ -119,7 +119,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         // 1. HERO CAROUSEL BANNER SECTION
         if (sectionKey === 'banner') {
           return (
-            <section key="banner" className="hero-section" style={{ height: '70vh', minHeight: '480px', position: 'relative', overflow: 'hidden' }}>
+            <section key="banner" className="hero-section" style={{ height: '72vh', minHeight: '500px', position: 'relative', overflow: 'hidden', background: '#1b4332' }}>
               {slides.map((slide, idx) => (
                 <div 
                   key={idx}
@@ -130,39 +130,47 @@ export const HomePage: React.FC<HomePageProps> = ({
                     left: 0,
                     width: '100%',
                     height: '100%',
-                    backgroundImage: `url(${slide.img})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
+                    background: 'linear-gradient(135deg, #1b4332 0%, #2d6a4f 60%, #40916c 100%)',
                     transition: 'opacity 0.8s ease-in-out',
                     opacity: activeSlide === idx ? 1 : 0,
                     zIndex: activeSlide === idx ? 1 : 0
                   }}
                 >
-                  <div className="hero-overlay" style={{ background: 'rgba(0, 0, 0, 0.25)', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}></div>
-                  <div className="container" style={{ position: 'relative', zIndex: 2, height: '100%', display: 'flex', alignItems: 'center' }}>
+                  <div className="container" style={{ position: 'relative', zIndex: 2, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '2rem' }}>
                     <div className="hero-content" style={{ maxWidth: '650px', textAlign: 'left' }}>
-                      <h1 className="hero-title" style={{ whiteSpace: 'pre-line', fontSize: '2.8rem', fontFamily: 'var(--font-serif)', lineHeight: 1.2, color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.3)', marginBottom: '1rem' }}>
+                      <span style={{ display: 'inline-block', padding: '0.35rem 1rem', background: 'rgba(197, 160, 89, 0.25)', color: '#f4e8c1', borderRadius: '50px', fontSize: '0.85rem', fontWeight: 600, border: '1px solid rgba(197, 160, 89, 0.4)', marginBottom: '1.25rem' }}>
+                        🌿 慧聚健康 · 專利品質保健
+                      </span>
+                      <h1 className="hero-title" style={{ whiteSpace: 'pre-line', fontSize: '2.8rem', fontFamily: 'var(--font-serif)', lineHeight: 1.25, color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.3)', marginBottom: '1.25rem' }}>
                         {slide.title}
                       </h1>
-                      <p style={{ color: 'rgba(255,255,255,0.95)', fontSize: '1.1rem', marginBottom: '2rem', fontWeight: 500 }}>
+                      <p style={{ color: 'rgba(255,255,255,0.92)', fontSize: '1.1rem', marginBottom: '2.2rem', fontWeight: 400, lineHeight: 1.6 }}>
                         {slide.desc}
                       </p>
                       <button 
-                        className="btn btn-primary" 
+                        className="btn" 
                         onClick={() => { setCurrentPage('shop'); setCategory('all'); }}
                         style={{ 
                           display: 'inline-flex', 
                           alignItems: 'center', 
                           gap: '0.6rem', 
-                          padding: '0.85rem 2rem', 
+                          padding: '0.9rem 2.2rem', 
                           fontSize: '1rem', 
                           fontWeight: 600, 
                           borderRadius: '50px',
-                          boxShadow: '0 4px 15px rgba(0,0,0,0.15)'
+                          background: '#c5a059',
+                          color: '#fff',
+                          border: 'none',
+                          boxShadow: '0 6px 20px rgba(197,160,89,0.4)',
+                          cursor: 'pointer'
                         }}
                       >
                         {slide.btnText || bannerBtnText || '探索慧聚健康全系列'} <ArrowRight size={18} />
                       </button>
+                    </div>
+
+                    <div className="hero-logo-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '320px', height: '320px', borderRadius: '24px', background: '#ffffff', padding: '1.75rem', boxShadow: '0 20px 40px rgba(0,0,0,0.3)', border: '4px solid #c5a059', flexShrink: 0 }}>
+                      <img src={appLogo} alt="慧聚健康 Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                     </div>
                   </div>
                 </div>
@@ -249,7 +257,12 @@ export const HomePage: React.FC<HomePageProps> = ({
                           style={{ cursor: 'pointer', position: 'relative' }}
                         >
                           <div className="product-image-container">
-                            <img src={product.image} alt={product.title} className="product-image" />
+                            <img 
+                              src={(product.image && !product.image.includes('pet_') && !product.image.includes('dog_') && !product.image.includes('cat_')) ? product.image : appLogo} 
+                              alt={product.title} 
+                              className="product-image" 
+                              style={{ objectFit: 'contain', padding: '0.75rem' }}
+                            />
                             
                             {/* Colorful CTA Badges */}
                             <div className="product-badges" style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', flexWrap: 'wrap', gap: '4px', zIndex: 5 }}>
@@ -277,7 +290,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                           </div>
 
                           <div className="product-info">
-                            <span className="product-category">{product.brand || 'Lè Rou'} &middot; 精選</span>
+                            <span className="product-category">{(product.brand && product.brand !== 'Lè Rou' && product.brand !== 'Lè Lè Design' && product.brand !== 'Ròu Ròu Selection') ? product.brand : '慧聚健康'} &middot; 保健商品</span>
                             <h3 className="product-title" style={{ fontSize: '0.95rem', height: '2.4rem', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', margin: '0.5rem 0' }}>
                               {product.title}
                             </h3>
@@ -371,8 +384,12 @@ export const HomePage: React.FC<HomePageProps> = ({
                         </div>
                       </div>
                       
-                      <div style={{ height: '220px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #eee' }}>
-                        <img src={post.media_url} alt="IG feed image" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <div style={{ height: '220px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-secondary)', padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <img 
+                          src={(post.media_url && !post.media_url.includes('pet_') && !post.media_url.includes('dog_') && !post.media_url.includes('cat_')) ? post.media_url : appLogo} 
+                          alt="慧聚健康官方貼文" 
+                          style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                        />
                       </div>
                       
                       <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.5, minHeight: '3.6rem', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>

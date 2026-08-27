@@ -1117,7 +1117,12 @@ function App() {
                           onClick={() => { setSelectedProduct(product); setCurrentPage('product-detail'); }}
                         >
                           <div className="product-image-container">
-                            <img src={product.image} alt={product.title} className="product-image" />
+                            <img 
+                              src={(product.image && !product.image.includes('pet_') && !product.image.includes('dog_') && !product.image.includes('cat_')) ? product.image : appLogo} 
+                              alt={product.title} 
+                              className="product-image" 
+                              style={{ objectFit: 'contain', padding: '0.75rem' }} 
+                            />
                             <div className="product-badges">
                               {product.badges?.map((badge, idx) => (
                                 <span 

@@ -7,25 +7,25 @@ const router = Router();
 const fallbackInstagramPosts = [
   {
     id: 'ig-post-1',
-    media_url: '/src/assets/pet_hero.jpg',
+    media_url: '/assets/logo.jpg',
     permalink: 'https://instagram.com',
-    caption: '帶上樂活防潑水機能雨衣，出遊再也不怕突如其來的雷陣雨！防風、防雨、安全反光，給毛孩最精緻的戶外防護。 #樂肉選品 #毛孩美學',
+    caption: '外食族與上班族的日常保健首選！高純度 rTG 深海魚油，通過 IFOS 五星國際認證，無腥味高吸收。 #慧聚健康 #深海魚油 #健康保養',
     timestamp: new Date().toISOString(),
     like_count: 1286
   },
   {
     id: 'ig-post-2',
-    media_url: '/src/assets/dog_bed.jpg',
+    media_url: '/assets/logo.jpg',
     permalink: 'https://instagram.com',
-    caption: '寒流來襲！這款與肉肉聯名推出的針織保暖毛衣，採用百分百雙色保暖面料，復古英倫風讓冷冷的天也充滿極致美感與暖意。 #樂肉選品 #冬日毛衣',
+    caption: '晶亮護理黃金比例 10:2！專利 FloraGLO 游離型葉黃素搭配山桑子與黑大豆皮萃取物，全方位守護視界靈活舒適。 #慧聚健康 #游離葉黃素 #晶亮護理',
     timestamp: new Date(Date.now() - 86400000).toISOString(),
     like_count: 942
   },
   {
     id: 'ig-post-3',
-    media_url: '/src/assets/pet_food.jpg',
+    media_url: '/assets/logo.jpg',
     permalink: 'https://instagram.com',
-    caption: '散步必備！一鍵智控隨行杯，單手就能輕鬆出水回水，食品級無雙酚A材質，給毛孩最純淨的飲水享受。 #樂肉選品 #隨行水杯 #散步必備',
+    caption: '維持消化道順暢機能！包埋專利百億複合益生菌，搭配水溶性膳食纖維與半乳寡糖，給全家最安心的順暢照顧。 #慧聚健康 #百億益生菌 #順暢保健',
     timestamp: new Date(Date.now() - 172800000).toISOString(),
     like_count: 735
   }

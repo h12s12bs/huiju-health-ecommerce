@@ -66,8 +66,8 @@ export const BrandsPage: React.FC<BrandsPageProps> = ({
             >
               {idx % 2 === 0 ? (
                 <>
-                  <div style={{ borderRadius: '12px', overflow: 'hidden', height: '320px' }}>
-                    <img src={brand.img} alt={brand.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <div style={{ borderRadius: '12px', overflow: 'hidden', height: '320px', background: 'var(--bg-secondary)', padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src={petHero} alt={brand.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                   </div>
                   <div>
                     <span className="recipe-tag" style={{ background: 'var(--primary-light)', color: 'var(--primary)', fontWeight: 600 }}>{brand.tag}</span>
@@ -81,7 +81,7 @@ export const BrandsPage: React.FC<BrandsPageProps> = ({
                       }}
                       style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
                     >
-                      瀏覽品牌旗下精品 <ArrowRight size={16} />
+                      瀏覽品牌旗下商品 <ArrowRight size={16} />
                     </button>
                   </div>
                 </>
@@ -99,11 +99,11 @@ export const BrandsPage: React.FC<BrandsPageProps> = ({
                       }}
                       style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
                     >
-                      瀏覽品牌旗下精品 <ArrowRight size={16} />
+                      瀏覽品牌旗下商品 <ArrowRight size={16} />
                     </button>
                   </div>
-                  <div style={{ borderRadius: '12px', overflow: 'hidden', height: '320px' }}>
-                    <img src={brand.img} alt={brand.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <div style={{ borderRadius: '12px', overflow: 'hidden', height: '320px', background: 'var(--bg-secondary)', padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src={petHero} alt={brand.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                   </div>
                 </>
               )}

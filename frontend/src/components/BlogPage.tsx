@@ -93,9 +93,9 @@ export const BlogPage: React.FC<BlogPageProps> = ({
 
             <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border)', marginBottom: '2.5rem' }}>
               <img 
-                src={selectedPost.img} 
+                src={(selectedPost.img && !selectedPost.img.includes('pet_') && !selectedPost.img.includes('dog_') && !selectedPost.img.includes('cat_')) ? selectedPost.img : '/assets/logo.jpg'} 
                 alt={selectedPost.title} 
-                style={{ width: '100%', maxHeight: '420px', objectFit: 'cover' }} 
+                style={{ width: '100%', maxHeight: '420px', objectFit: 'contain', background: 'var(--bg-secondary)', padding: '1.5rem' }} 
               />
             </div>
 
@@ -124,8 +124,12 @@ export const BlogPage: React.FC<BlogPageProps> = ({
                   onClick={() => setSelectedPost(recipe)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <div className="recipe-img-container">
-                    <img src={recipe.img} alt={recipe.title} className="recipe-img" />
+                  <div style={{ height: '220px', overflow: 'hidden', background: 'var(--bg-secondary)', padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img 
+                      src={(recipe.img && !recipe.img.includes('pet_') && !recipe.img.includes('dog_') && !recipe.img.includes('cat_')) ? recipe.img : '/assets/logo.jpg'} 
+                      alt={recipe.title} 
+                      style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                    />
                   </div>
                   <div className="recipe-content">
                     <span className="recipe-tag">{recipe.tag}</span>
