@@ -1479,17 +1479,18 @@
   vertical-align: middle;
 }
 
-/* Top Announcement Bar */
+/* Top Announcement Bar - 慧聚健康尊爵深綠與香檳金 */
 .announcement-bar {
-  background: var(--primary);
-  color: var(--bg-primary);
-  height: 35px;
+  background: #1b4332;
+  color: #f4e8c1;
+  height: 38px;
   display: flex;
   align-items: center;
   overflow: hidden;
   position: relative;
   width: 100%;
   z-index: 101;
+  border-bottom: 1px solid rgba(197, 160, 89, 0.3);
 }
 
 .announcement-track {
@@ -1504,6 +1505,7 @@
   font-size: 0.825rem;
   font-weight: 600;
   letter-spacing: 0.05em;
+  color: #f4e8c1;
 }
 
 @keyframes marquee {
@@ -1511,13 +1513,18 @@
   100% { transform: translateX(-50%); }
 }
 
-/* Centered Header Layout */
+/* Centered Header Layout - 慧聚健康白綠香檳金頂級質感 */
 :root {
   --header-height: 160px !important;
 }
 
 .app-header {
   height: var(--header-height) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid #d1e4d8 !important;
+  box-shadow: 0 4px 20px rgba(45, 106, 79, 0.05) !important;
 }
 
 .header-container {
@@ -1535,7 +1542,7 @@
   justify-content: space-between;
   align-items: center;
   padding-bottom: 0.5rem;
-  border-bottom: 1px dashed rgba(140, 90, 60, 0.15);
+  border-bottom: 1px dashed rgba(45, 106, 79, 0.15);
   position: relative;
 }
 

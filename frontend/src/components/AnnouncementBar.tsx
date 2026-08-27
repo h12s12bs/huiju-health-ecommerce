@@ -12,7 +12,7 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({ text }) => {
   useEffect(() => {
     const list = [
       text,
-      "🌿 慧聚健康 - 專為您與全家健康量身打造的生醫與養生選物 🍃",
+      "🌿 慧聚健康 - 專為您與全家健康量身打造的高品質保健商品 🍃",
       "✨ 全館滿 NT$2000 即享免運！新會員註冊即贈 $100 健康體驗金！ ✨",
       "📦 嚴選國際專利認證原料，全流程溫控冷鏈安心配送 🚚"
     ].filter(Boolean);

@@ -161,7 +161,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                           boxShadow: '0 4px 15px rgba(0,0,0,0.15)'
                         }}
                       >
-                        {slide.btnText || bannerBtnText || '探索全系列選物'} <ArrowRight size={18} />
+                        {slide.btnText || bannerBtnText || '探索慧聚健康全系列'} <ArrowRight size={18} />
                       </button>
                     </div>
                   </div>

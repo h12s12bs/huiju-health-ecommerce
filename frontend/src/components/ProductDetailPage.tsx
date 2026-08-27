@@ -187,7 +187,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', fontSize: '0.9rem' }}>
                     <span style={{ color: 'var(--text-muted)' }}>品牌經銷</span>
-                    <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{product.brand || '慧聚健康生醫'}</span>
+                    <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{product.brand || '慧聚健康'}</span>
                   </div>
                 </div>
               )}

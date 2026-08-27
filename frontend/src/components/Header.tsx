@@ -173,7 +173,7 @@ export const Header: React.FC<HeaderProps> = ({
                     )}
                     {item.page === 'brands' && (
                       <ul className="dropdown-menu">
-                        <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>慧聚生醫 (Huiju Bio-Tech)</a></li>
+                        <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>慧聚健康 (Huiju Health)</a></li>
                         <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>慧聚研發 (Huiju Labs)</a></li>
                         <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>HerbaCare 專利草本</a></li>
                       </ul>

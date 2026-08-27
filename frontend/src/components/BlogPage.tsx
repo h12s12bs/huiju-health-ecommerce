@@ -26,7 +26,7 @@ export const BlogPage: React.FC<BlogPageProps> = ({
     if (id === 'recipe-1') {
       return (
         <>
-          <p>現代人外食比例高、工作壓力大，深海魚油成為許多家庭日常不可或缺的頂級保健品。但面對市面上琳瑯滿目的魚油產品，該如何挑選才能發揮最佳保健功效？今天慧聚生醫營養師團隊特別為您整理深海魚油選購的三大關鍵指標！</p>
+          <p>現代人外食比例高、工作壓力大，深海魚油成為許多家庭日常不可或缺的頂級保健品。但面對市面上琳瑯滿目的魚油產品，該如何挑選才能發揮最佳保健功效？今天慧聚健康營養團隊特別為您整理深海魚油選購的三大關鍵指標！</p>
           
           <h3>原則一：認明 rTG 型態，高吸收率是關鍵</h3>
           <p>魚油的型態主要分為 TG 型、EE 型與 rTG 型。其中 rTG（Re-esterified Triglycerides）重組型魚油經過專利純化與結構重組，不僅濃度大幅提升至 80%-85% 以上，人體吸收率更是傳統 TG 型與 EE 型的 3 倍以上。</p>
@@ -86,7 +86,7 @@ export const BlogPage: React.FC<BlogPageProps> = ({
               
               <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.85rem', color: 'var(--text-muted)', borderBottom: '1px solid var(--border)', paddingBottom: '1.25rem' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Calendar size={14} /> 2026 年 8 月</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><User size={14} /> 慧聚生醫營養師團隊</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><User size={14} /> 慧聚健康營養團隊</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Clock size={14} /> 4 分鐘閱讀時間</span>
               </div>
             </div>

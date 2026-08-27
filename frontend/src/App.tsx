@@ -5,10 +5,12 @@ import {
 } from 'lucide-react';
 import './App.css';
 
-// Importing generated premium images
-import petHero from './assets/pet_hero.jpg';
-import dogBed from './assets/dog_bed.jpg';
-import petFood from './assets/pet_food.jpg';
+// Importing official brand logo image
+import logoImg from './assets/logo.jpg';
+
+const petHero = logoImg;
+const dogBed = logoImg;
+const petFood = logoImg;
 
 const appLogo = '/assets/logo.jpg';
 

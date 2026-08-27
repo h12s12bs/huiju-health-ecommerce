@@ -22,20 +22,20 @@ export const BrandsPage: React.FC<BrandsPageProps> = ({
         
         <div className="section-header" style={{ textAlign: 'center', marginBottom: '4rem' }}>
           <span className="section-subtitle">Huiju Health Brands</span>
-          <h2 className="section-title">慧聚生醫與專利品牌</h2>
+          <h2 className="section-title">慧聚健康品牌專區</h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginTop: '0.5rem' }}>
-            專注於國際專利原料與科學實驗數據，為您與全家嚴選高品質生醫保健選品。
+            專注於國際專利原料與科學實驗數據，為您與全家嚴選高品質保健商品。
           </p>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
           {[
             {
-              name: '慧聚生醫 (Huiju Bio-Tech)',
+              name: '慧聚健康 (Huiju Health)',
               desc: '專注於頂級高純度 rTG 深海魚油與專利軟膠囊萃取技術。以挪威優質遠洋鯷魚原料為起點，通過國際 IFOS 五星無重金屬安全認證，提供最純淨的心血管與思緒敏捷滋養。',
               tag: '頂級魚油 / 國際認證',
               img: petHero,
-              brandKey: 'Huiju Bio-Tech'
+              brandKey: 'Huiju Health'
             },
             {
               name: '慧聚研發 (Huiju Labs)',
