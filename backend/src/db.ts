@@ -54,7 +54,7 @@ export async function getDatabase(): Promise<DatabaseWrapper> {
     return dbInstance;
   }
 
-  const connectionString = process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/huiju_ecommerce';
+  const connectionString = process.env.DATABASE_URL || 'postgres://postgres:postgrespassword@localhost:5433/huiju_ecommerce';
 
   const pool = new Pool({
     connectionString,

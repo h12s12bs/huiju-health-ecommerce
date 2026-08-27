@@ -26,23 +26,20 @@ export const BlogPage: React.FC<BlogPageProps> = ({
     if (id === 'recipe-1') {
       return (
         <>
-          <p>多雨氣候的台灣，經常面臨毛孩出門就淋濕感冒的窘境。買雨衣最怕量錯尺寸摩擦受傷，或者買了全包覆式卻限制了關節跑跳。今天樂肉美學生活誌教你如何以最精確的三條線量出完美舒適的剪裁！</p>
+          <p>現代人外食比例高、工作壓力大，深海魚油成為許多家庭日常不可或缺的頂級保健品。但面對市面上琳瑯滿目的魚油產品，該如何挑選才能發揮最佳保健功效？今天慧聚生醫營養師團隊特別為您整理深海魚油選購的三大關鍵指標！</p>
           
-          <h3>第一條線：背長 (Back Length)</h3>
-          <p>背長是從毛孩的脖子根部（大概是項圈配戴的位置）一路測量到尾巴根部。量的時候請務必讓毛孩維持站立姿勢，如果坐著或躺著，量出來的數值會偏長，導致買回去的雨衣下擺太長拖地，容易踩到甚至弄髒。</p>
+          <h3>原則一：認明 rTG 型態，高吸收率是關鍵</h3>
+          <p>魚油的型態主要分為 TG 型、EE 型與 rTG 型。其中 rTG（Re-esterified Triglycerides）重組型魚油經過專利純化與結構重組，不僅濃度大幅提升至 80%-85% 以上，人體吸收率更是傳統 TG 型與 EE 型的 3 倍以上。</p>
           
-          <h3>第二條線：胸圍 (Chest Girth)</h3>
-          <p>胸圍是影響服飾舒適度最關鍵的數值。請找到狗狗前腳後方、胸腔最寬、最厚實的一圈進行測量。量的時候尺要貼合毛髮，但不宜勒得太緊，建議預留 2-3 公分的空間（大約兩根手指的寬度），這樣毛孩跑跳時胸腔擴張才不會有壓迫感。</p>
+          <h3>原則二：查看國際 IFOS 五星認證與無重金屬檢驗</h3>
+          <p>海洋污染日益嚴峻，挑選魚油時必須確認原料來源是否來自無污染的冷水海域（如挪威或小型鯷魚），並確認通過 IFOS（International Fish Oil Standards）五星權威認證，確保塑化劑、重金屬與戴奧辛殘留均為未檢出。</p>
           
-          <h3>第三條線：頸圍 (Neck Girth)</h3>
-          <p>頸圍是沿著項圈通常配戴的地方量一圈。機能雨衣為了防雨水滲入，領口通常會做抽繩收緊，所以量取合適的領口數值，能確保抽繩束緊後防風防雨又不會造成毛孩吞嚥困難。</p>
+          <h3>原則三：補充時間與劑量建議</h3>
+          <p>魚油屬於脂溶性營養素，建議於隨餐或餐後 30 分鐘內搭配溫開水食用，食物中的油脂能顯著提升 Omega-3 的吸收效率。成人每日建議補充 1000mg - 2000mg 的高純度魚油。</p>
           
           <blockquote>
-            <strong>樂肉美學提醒：</strong>薩摩耶、黃金獵犬等雙層毛豐厚或毛髮蓬鬆的毛孩，在量胸圍時要稍微把尺貼緊皮膚，否則量出來的數值會因為蓬鬆毛髮而被放大兩三個尺寸，穿起來就會過於寬鬆累贅。
+            <strong>慧聚健康營養提醒：</strong>若同時有在服用抗凝血藥物或即將進行手術者，建議在補充高濃度魚油前先諮詢專業醫師或營養師意見。
           </blockquote>
-          
-          <h3>機能面料的保養</h3>
-          <p>樂肉機能雨衣採用特製防潑水透氣面料，每次散步回家後，千萬不要直接丟進洗衣機脫水！只需要以常溫清水沖洗表面泥沙與髒污，隨後使用衣架懸掛於陰涼通風處陰乾，即可維持極佳防潑水塗層效能。</p>
         </>
       );
     }
@@ -50,23 +47,16 @@ export const BlogPage: React.FC<BlogPageProps> = ({
     // recipe-2
     return (
       <>
-        <p>優質皮革配件就像美酒，隨著時間與毛孩家長的共同足跡而發酵出獨一無二的風味。義大利植鞣牛皮之所以被奉為毛孩牽繩的首選，不只是因為它天然無毒的植物鞣製工藝，更是因為它卓越的抗拉伸韌性與絕佳手感。</p>
+        <p>隨著平板手機與電腦螢幕成為工作與生活不可或缺的一部份，許多人常常感到眼睛乾澀與疲勞。游離型葉黃素搭配黃金比例，能有效建立防護層，提供極緻晶亮感受。</p>
         
-        <h3>什麼是植鞣革的「經年變化」？</h3>
-        <p>植物鞣製（Vegetable Tanning）是使用從樹皮、果實等植物中萃取的單寧酸進行皮革鞣製。剛出廠的純素植鞣皮革會呈現淡雅的燕麥奶白或粉膚色。隨著每次您握在手中散步時的掌心油脂、日常陽光照射與毛孩毛髮的油脂摩擦，皮革表面會慢慢蛻變為沉穩內斂的蜜焦糖色，並散發溫潤自然的光澤。</p>
+        <h3>什麼是黃金比例 10:2？</h3>
+        <p>美國國家衛生研究院（NIH）大型研究指出，葉黃素（Lutein）與玉米黃素（Zeaxanthin）以 10mg : 2mg 的比例搭配時，能達到最佳的協同吸收與防護效能。</p>
         
-        <h3>職人雙針縫線的奧秘</h3>
-        <p>市售量產牽繩大多使用針車單線縫製，一旦斷了一節，整條縫線就會像骨牌一樣全部鬆開，這在戶外拉力極大時是非常危險的。樂肉選品嚴選的職人手縫項圈牽繩，堅持採用馬鞍雙針交錯縫法。即便其中一條線磨損斷裂，另一條線依然能維持強固的鎖定力，保障出遊的絕對安全。</p>
+        <h3>游離型（Free Form）vs 酯化型（Ester Form）</h3>
+        <p>傳統酯化型葉黃素分子較大，需要經由腸道酵素水解後才能被吸收；而專利游離型葉黃素（如 FloraGLO）分子量小，無需消化過程即可直接為腸道高效吸收，生物利用率提升 23%。</p>
         
-        <h3>純黃銅防鏽五金</h3>
-        <p>為避免牽繩受潮五金生鏽，我們全系列採用高規格實心純黃銅扣環。黃銅同樣會隨著歲月有些許氧化後的古銅質感，與皮革的焦糖色相得益彰，散發濃濃的復古英倫氣息。</p>
-        
-        <h3>日常保養三步驟</h3>
-        <ol>
-          <li><strong>避水乾燥</strong>：皮革若不慎淋雨，請立刻使用乾布輕輕按壓吸乾水分，放置於通風陰涼處自然晾乾，切勿使用吹風機熱風烘烤，否則皮革纖維會硬化龜裂。</li>
-          <li><strong>油脂滋養</strong>：每季或每半年，建議使用極少許專用貂油或皮革保養油，以棉布畫圈抹勻表面。這能重新注入皮革纖維所需的油脂，維持皮革柔軟防裂。</li>
-          <li><strong>防霉存放</strong>：若長期不使用，請放進隨附的防塵袋中，並置於乾燥陰涼處，內放乾燥劑，避免台灣潮濕氣候引起發霉。</li>
-        </ol>
+        <h3>搭配複方效果更佳</h3>
+        <p>除了葉黃素與玉米黃素外，添加山桑子（富含花青素）、黑大豆皮萃取物以及鋅元素，能全方位舒緩疲勞感，達到加倍的防護力。</p>
       </>
     );
   };
@@ -95,9 +85,9 @@ export const BlogPage: React.FC<BlogPageProps> = ({
               </h1>
               
               <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.85rem', color: 'var(--text-muted)', borderBottom: '1px solid var(--border)', paddingBottom: '1.25rem' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Calendar size={14} /> 2026 年 7 月</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><User size={14} /> 樂肉主廚級毛爸媽</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Clock size={14} /> 5 分鐘閱讀時間</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Calendar size={14} /> 2026 年 8 月</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><User size={14} /> 慧聚生醫營養師團隊</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Clock size={14} /> 4 分鐘閱讀時間</span>
               </div>
             </div>
 
@@ -121,9 +111,9 @@ export const BlogPage: React.FC<BlogPageProps> = ({
           /* ==================== BLOG POSTS LIST VIEW ==================== */
           <div>
             <div className="section-header" style={{ textAlign: 'center', marginBottom: '4rem' }}>
-              <span className="section-subtitle">Dog Life Blog</span>
-              <h2 className="section-title">毛孩美學生活誌</h2>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginTop: '0.5rem' }}>與您分享機能穿搭、皮革保養與毛孩居家質感生活小學問</p>
+              <span className="section-subtitle">Health & Wellness Blog</span>
+              <h2 className="section-title">慧聚健康專欄</h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginTop: '0.5rem' }}>與您分享生醫保健、葉黃素吸收與日常養生保健常識</p>
             </div>
 
             <div className="recipes-grid">

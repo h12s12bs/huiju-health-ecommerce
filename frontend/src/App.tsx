@@ -89,16 +89,16 @@ export interface Customer {
 const DEFAULT_RECIPES = [
   {
     id: 'recipe-1',
-    tag: '穿搭指南',
-    title: '今天帶樂樂和肉肉出門防雨機能風衣首發 🌧️🐕',
-    desc: '今天下起毛毛雨，幸好穿上最新款的防潑水機能雨衣！立體剪裁完全不磨肚子，樂樂跑起來像風一樣自由。領口還有防風拉繩，散步安全又吸睛。 #樂肉選品 #毛孩服飾 #機能雨衣 #樂樂與肉肉真實體驗',
+    tag: '營養專欄',
+    title: '高純度深海魚油選購三大黃金原則 🐟✨',
+    desc: '外食族與上班族的日常保健首選！教您如何認明 rTG 高吸收型態、IFOS 五星認證與專利無重金屬純化技術。 #慧聚健康 #深海魚油 #生醫保健 #健康新生活',
     img: petHero
   },
   {
     id: 'recipe-2',
-    tag: '配件學問',
-    title: 'Wild Earth 經典義大利植鞣牛皮牽繩補貨啦！✨',
-    desc: '收到許多家長的私訊，大家最愛的焦糖棕與復古綠牽繩終於到倉了！手感紮實溫潤，越用會越有專屬的光澤。出門散步的質感，就從一條好牽繩開始。 #樂肉選品 #散步小配件 #義大利植鞣革 #手工雙針縫線',
+    tag: '晶亮護理',
+    title: '游離型葉黃素黃金比例 10:2 全解析 👁️🌿',
+    desc: '長時間使用電腦與手機？專利 FloraGLO 游離型葉黃素搭配山桑子與黑大豆皮萃取物，全方位守護您的晶亮舒適感。 #慧聚健康 #游離型葉黃素 #晶亮舒適 #靈活護理',
     img: dogBed
   }
 ];
@@ -117,38 +117,38 @@ function App() {
   const [customers, setCustomers] = useState<Customer[]>([]);
 
   // CUSTOM WEB CONFIGS (LOADED FROM system_config DB)
-  const [announcementText, setAnnouncementText] = useState('🔥 全館毛孩機能服飾、外出用品滿 NT$2000 即享免運！新加入會員贈 $100 購物金！ 🔥');
-  const [heroTitle, setHeroTitle] = useState('質感大地色系美與實用兼顧\n與毛孩共居的舒適日常');
-  const [heroDesc, setHeroDesc] = useState('以樂樂與肉肉的溫暖毛色為設計靈感。我們只為愛犬嚴選優質設計款機能服飾、散步小用品與抗焦慮玩具。用最有溫度的美學，疼愛您的毛寶貝。');
+  const [announcementText, setAnnouncementText] = useState('🌿 全館滿 NT$2000 即享免運！新會員註冊即贈 $100 健康體驗金！ 🌿');
+  const [heroTitle, setHeroTitle] = useState('草本生醫與極致品質兼顧\n守護您與全家人的健康生活');
+  const [heroDesc, setHeroDesc] = useState('以科學數據與國際專利為研發核心。我們嚴選高純度深海魚油、游離型葉黃素與百億專利益生菌。用極緻品質照顧您的全家健康。');
   const [heroImage, setHeroImage] = useState('');
   const [heroSlides, setHeroSlides] = useState<Array<{ id: string; title: string; desc: string; img: string; btnText: string }>>([
     {
       id: 'slide-1',
-      title: '質感大地色系美與實用兼顧\n與毛孩共居的舒適日常',
-      desc: '以樂樂與肉肉的溫暖毛色為設計靈感。我們只為愛犬嚴選優質設計款機能服飾、散步小用品與抗焦慮玩具。',
+      title: '草本生醫與極致品質兼顧\n守護您與全家人的健康生活',
+      desc: '以科學數據與國際專利為研發核心。我們嚴選高純度深海魚油、游離型葉黃素與百億專利益生菌。',
       img: '',
-      btnText: '探索樂肉精選'
+      btnText: '探索全系列健康選品'
     },
     {
       id: 'slide-2',
-      title: '職人手工雙針雙線\n義大利植鞣牛皮牽繩',
-      desc: '經年累月的溫潤皮革焦糖色澤，專為中大型毛孩設計。',
+      title: 'rTG 高純度 85% 深海魚油\n思緒敏捷與心血管護理',
+      desc: '挪威乾淨海域提取，專利軟膠囊無腥味，高吸收率保健首選。',
       img: '',
-      btnText: '查看植鞣選品'
+      btnText: '查看深海魚油'
     },
     {
       id: 'slide-3',
-      title: '舒緩分離焦慮\n天然藏食嗅聞益智玩具',
-      desc: '健康消耗毛孩多餘精力與壓力，提升嗅覺專注力。',
+      title: '專利百億複合益生菌\n維持腸道消化道順暢機能',
+      desc: '包埋專利技術，15 支高活性專利益生菌與水溶性膳食纖維。',
       img: '',
-      btnText: '選購紓壓玩具'
+      btnText: '選購順暢益生菌'
     }
   ]);
   const [blogArticles, setBlogArticles] = useState<any[]>(DEFAULT_RECIPES);
   const [customCategories, setCustomCategories] = useState<Array<{ id: string; name: string }>>([
-    { id: 'apparel', name: '毛孩服飾' },
-    { id: 'accessories', name: '精選配件' },
-    { id: 'outing', name: '外出用品' },
+    { id: 'apparel', name: '核心保健' },
+    { id: 'accessories', name: '個人護理' },
+    { id: 'outing', name: '順暢消化' },
     { id: 'toys', name: '紓壓玩具' }
   ]);
   const [customBrands, setCustomBrands] = useState<Array<{ id: string; name: string }>>([
@@ -1065,7 +1065,7 @@ function App() {
                 <div className="container">
                   <div className="section-header" style={{ textAlign: 'center', marginBottom: '3rem' }}>
                     <span className="section-subtitle">Premium Selection</span>
-                    <h2 className="section-title">毛孩美學選物</h2>
+                    <h2 className="section-title">慧聚健康選物</h2>
                   </div>
 
                   {/* Toolbar Filters */}
@@ -1536,8 +1536,8 @@ function App() {
                   <h2 style={{ fontSize: '1.8rem', marginBottom: '1.5rem', color: 'var(--text-primary)', borderBottom: '2px solid var(--border)', paddingBottom: '0.5rem' }}>退換貨政策</h2>
                   <div style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.8', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     <p><strong>1. 七天鑑賞期</strong>：依消費者保護法規定，會員享有商品到貨七天猶豫期（鑑賞期非試用期）之權利。退回商品必須是全新狀態且包裝完整。</p>
-                    <p><strong>2. 服飾退換貨說明</strong>：由於毛孩衛生考量，服飾類商品若經試穿、沾染毛髮、有異味或下水清洗者，恕**不接受退換貨**。測量尺寸時，請務必先用軟尺測量身型。</p>
-                    <p><strong>3. 客製化與貼身小用品</strong>：基於衛生考量，貼身配件類商品經拆封或包裝破損者，非產品本身嚴重瑕疵恕不接受退換貨。</p>
+                    <p><strong>2. 保健食品退換貨說明</strong>：由於口服與生醫保健食品之食品安全考量，商品若已拆封、封口膜破損或外盒損壞者，恕**不接受退換貨**。</p>
+                    <p><strong>3. 產品品質與瑕疵處理</strong>：若商品於運送過程中受損或有瑕疵，請於收到貨 24 小時內拍下商品與外盒照片聯繫客服，我們將儘速為您辦理免費換貨處理。</p>
                     <p><strong>4. 退款處理</strong>：確認退回商品無誤後，我們將於 7 個工作天內退款至您的指定帳戶，不收取任何平台退款手續費。</p>
                   </div>
                 </div>
@@ -2041,7 +2041,7 @@ function App() {
                   <div style={{ marginBottom: '1.5rem' }}>
                     <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', fontWeight: 'bold' }}>您的優質選物訂單已成立！</h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6 }}>
-                      感謝您的支持，我們正在小心包裝您的精緻毛孩選物，出貨時會以簡訊及郵件通知您。
+                      感謝您的支持，我們正在小心包裝您的健康生醫選物，出貨時會以簡訊及郵件通知您。
                     </p>
                   </div>
                   <div style={{ background: 'var(--bg-secondary)', width: '100%', padding: '1.25rem', borderRadius: '8px', border: '1px solid var(--border)', fontSize: '0.9rem', textAlign: 'left', marginBottom: '1.5rem' }}>

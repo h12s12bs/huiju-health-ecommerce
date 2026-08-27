@@ -12,9 +12,9 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({ text }) => {
   useEffect(() => {
     const list = [
       text,
-      "🐶 樂肉選品 - 專為毛孩量身打造的優質生活美學選物 🐾",
-      "✨ 全館滿 NT$2000 即享免運！新會員加入贈 $100 購物金！ ✨",
-      "📦 精緻 C2C 寄件與店到店電子地圖全面支援，出貨後配送安全無比 🚚"
+      "🌿 慧聚健康 - 專為您與全家健康量身打造的生醫與養生選物 🍃",
+      "✨ 全館滿 NT$2000 即享免運！新會員註冊即贈 $100 健康體驗金！ ✨",
+      "📦 嚴選國際專利認證原料，全流程溫控冷鏈安心配送 🚚"
     ].filter(Boolean);
     setMessages(list);
   }, [text]);

@@ -824,7 +824,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         <aside className="portal-sidebar glass-panel" style={{ height: 'fit-content' }}>
           <div className="portal-user-card" style={{ background: 'var(--bg-secondary)', padding: '1.25rem', borderRadius: '10px', textAlign: 'center', marginBottom: '1.5rem' }}>
             <Settings size={36} style={{ color: 'var(--primary)', marginBottom: '0.5rem' }} />
-            <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.15rem', color: 'var(--text-primary)', fontWeight: 600 }}>樂肉選品後台管理</h3>
+            <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.15rem', color: 'var(--text-primary)', fontWeight: 600 }}>慧聚健康後台管理</h3>
             <span className="badge badge-gold" style={{ fontSize: '0.65rem', marginTop: '0.25rem', textTransform: 'none' }}>系統管理員</span>
           </div>
           

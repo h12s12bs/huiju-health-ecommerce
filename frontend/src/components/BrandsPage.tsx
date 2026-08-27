@@ -21,35 +21,35 @@ export const BrandsPage: React.FC<BrandsPageProps> = ({
       <div className="container">
         
         <div className="section-header" style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <span className="section-subtitle">Curated Brands</span>
-          <h2 className="section-title">精選品牌美學</h2>
+          <span className="section-subtitle">Huiju Health Brands</span>
+          <h2 className="section-title">慧聚生醫與專利品牌</h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginTop: '0.5rem' }}>
-            專注於純手作質感與極致舒適機能，為您的毛毛寶貝嚴選生活配備。
+            專注於國際專利原料與科學實驗數據，為您與全家嚴選高品質生醫保健選品。
           </p>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
           {[
             {
-              name: 'Lè Lè Design (樂樂嚴選)',
-              desc: '源自對奶油白色毛孩（如薩摩耶、金毛、拉布拉多）身型與毛色的體貼設計。專注於高防潑水機能雨衣、單手按壓隨行水杯與極輕量透氣胸背帶。強調大雨防水性、夜間安全反光條與溫暖舒服的材質，讓愛犬在多雨季節依然能自在探索世界。',
-              tag: '機能防護 / 奶油白美學',
+              name: '慧聚生醫 (Huiju Bio-Tech)',
+              desc: '專注於頂級高純度 rTG 深海魚油與專利軟膠囊萃取技術。以挪威優質遠洋鯷魚原料為起點，通過國際 IFOS 五星無重金屬安全認證，提供最純淨的心血管與思緒敏捷滋養。',
+              tag: '頂級魚油 / 國際認證',
               img: petHero,
-              brandKey: 'Lè Lè Design'
+              brandKey: 'Huiju Bio-Tech'
             },
             {
-              name: 'Ròu Ròu Selection (肉肉推薦)',
-              desc: '專為注重細節、手作溫度與經久耐用度的毛爸媽設計。主打義大利進口頂級植鞣革，由職人手工雙針雙線縫製的牽繩項圈，以及精緻雙色保暖針織毛衣。溫潤的焦糖紅銅皮革色澤，隨時光更顯沉穩。純黃銅防鏽五金扣件，堅固牢靠，體現卓越工藝。',
-              tag: '職人手工 / 皮革焦糖美學',
+              name: '慧聚研發 (Huiju Labs)',
+              desc: '專為現代螢幕族與上班族打造。結合 FloraGLO 美國專利游離型葉黃素與黃金比例 10:2，並添加山桑子與黑大豆皮萃取物，全方位守護視界晶亮舒適。',
+              tag: '游離葉黃素 / 晶亮護理',
               img: dogBed,
-              brandKey: 'Ròu Ròu Selection'
+              brandKey: 'Huiju Labs'
             },
             {
-              name: 'Wild Earth (荒野綠動)',
-              desc: '致力於為大自然與毛孩提供綠色友善守護的原創品牌。嚴選純天然厚實帆布與耐磨抗咬的環保嗅聞藏食玩具，設計出兼具腦力開發與分離焦慮排解的趣味玩具，在玩耍的過程中自然消耗過剩精力，享受綠色純淨的陪伴時光。',
-              tag: '天然環保 / 益智玩具',
+              name: 'HerbaCare 專利草本',
+              desc: '嚴選 15 支高活性專利益生菌與天然漢方草本，搭配水溶性膳食纖維與包埋專利技術。有效穩定通過胃酸，維護消化道順暢機能與調節體質。',
+              tag: '百億益生菌 / 漢方養生',
               img: petFood,
-              brandKey: 'Wild Earth'
+              brandKey: 'HerbaCare'
             }
           ].map((brand, idx) => (
             <div 

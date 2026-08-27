@@ -60,7 +60,7 @@ export const PackingSlipModal: React.FC<PackingSlipModalProps> = ({ order, onClo
 
         {/* Printable Area */}
         <div className="print-slip-body">
-          <div className="packing-slip-title">樂肉選品 &middot; 出貨撿貨單</div>
+          <div className="packing-slip-title">慧聚健康 &middot; 出貨撿貨單</div>
           
           <div className="packing-slip-meta">
             <div>
@@ -113,7 +113,7 @@ export const PackingSlipModal: React.FC<PackingSlipModalProps> = ({ order, onClo
           <div style={{ marginTop: '3rem', borderTop: '1px dashed #999', paddingTop: '1.5rem', fontSize: '0.85rem', color: '#666' }}>
             <p><strong>【備註與說明】</strong></p>
             <p>1. 本單為內部出貨及人員配箱專用之撿貨清單，請依照表格內「撿貨」核取方塊逐項點收裝箱。</p>
-            <p>2. 樂肉精選毛孩機能服飾出貨前請再次確認線頭已修剪，並確保包裝紙盒完好無損，謝謝出貨團隊的辛勞！</p>
+            <p>2. 慧聚健康生醫與保健商品出貨前請再次確認封口膜與包裝完好無損，謝謝出貨團隊的辛勞！</p>
           </div>
         </div>
 

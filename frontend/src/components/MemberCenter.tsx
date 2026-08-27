@@ -120,7 +120,7 @@ export const MemberCenter: React.FC<MemberCenterProps> = ({
     <div className="container" style={{ padding: '3rem 1.5rem', minHeight: '80vh' }}>
       <div className="section-header" style={{ marginBottom: '2rem' }}>
         <span className="section-subtitle">MEMBER CENTER</span>
-        <h2 className="section-title" style={{ fontSize: '2rem', fontFamily: 'var(--font-serif)' }}>樂肉會員中心</h2>
+        <h2 className="section-title" style={{ fontSize: '2rem', fontFamily: 'var(--font-serif)' }}>慧聚健康會員中心</h2>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: '2rem', alignItems: 'start' }}>

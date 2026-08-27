@@ -1,40 +1,40 @@
-/* CSS Design System for 樂肉選品 Lè Ròu Select - 溫暖大地色系 */
+/* CSS Design System for 慧聚健康 Huiju Health - 草本生醫與香檳金典雅色系 */
 
 :root {
-  /* Color Palette - Warm Earth Tones (樂樂 & 肉肉 毛色調) */
-  --bg-primary: #fdfbf7;      /* 樂樂的燕麥奶亮白 */
-  --bg-secondary: #f6eedf;    /* 溫馨暖沙色 */
-  --bg-tertiary: #ebdcc3;     /* 麥芽黃褐色 */
-  --bg-glass: rgba(253, 251, 247, 0.85);
+  /* Color Palette - 慧聚健康品牌企業識別配色 (生醫草本綠 & 尊爵香檳金) */
+  --bg-primary: #fafcfa;      /* 典雅純淨白 */
+  --bg-secondary: #f0f7f3;    /* 溫和草本淺綠白 */
+  --bg-tertiary: #e2efe7;     /* 柔和質地金綠色 */
+  --bg-glass: rgba(250, 252, 250, 0.88);
   
-  --primary: #8c5a3c;         /* 肉肉的焦糖紅銅毛色 */
-  --primary-rgb: 140, 90, 60;
-  --primary-hover: #6d4227;
-  --primary-light: rgba(140, 90, 60, 0.08);
+  --primary: #2d6a4f;         /* 慧聚草本翡翠綠 */
+  --primary-rgb: 45, 106, 79;
+  --primary-hover: #1b4332;
+  --primary-light: rgba(45, 106, 79, 0.08);
   
-  --accent: #d4a373;          /* 溫暖金黃色，象徵溫馨與活力 */
-  --accent-hover: #bc8e5e;
-  --accent-light: rgba(212, 163, 115, 0.15);
+  --accent: #c5a059;          /* 典雅香檳金，象徵尊爵品質與健康活力 */
+  --accent-hover: #b38e46;
+  --accent-light: rgba(197, 160, 89, 0.15);
   
-  --text-primary: #3a2e2b;    /* 濃深黑可可褐 */
-  --text-secondary: #6d5b57;  /* 煙燻暖灰褐 */
-  --text-muted: #a3938f;      /* 灰褐色 */
+  --text-primary: #1e2923;    /* 極致沉穩曜石黑綠 */
+  --text-secondary: #496254;  /* 煙燻質感深綠灰 */
+  --text-muted: #889e91;      /* 柔和典雅綠灰 */
   
-  --border: #ebdcc3;
-  --border-focus: #cfa88b;
+  --border: #d1e4d8;
+  --border-focus: #52b788;
   
-  --success: #5a7d61;         /* 橄欖草本綠 */
-  --error: #bd5a5a;           /* 暖陶土紅 */
+  --success: #2d6a4f;         /* 生醫草本綠 */
+  --error: #c94a4a;           /* 典雅紅 */
   
   /* Fonts */
   --font-serif: 'Cinzel', serif;
   --font-sans: 'Outfit', sans-serif;
   
   /* Shadows & Blurs */
-  --shadow-sm: 0 2px 8px rgba(58, 46, 43, 0.06);
-  --shadow-md: 0 8px 24px rgba(58, 46, 43, 0.1);
-  --shadow-lg: 0 16px 40px rgba(58, 46, 43, 0.15);
-  --shadow-gold: 0 0 15px rgba(212, 163, 115, 0.2);
+  --shadow-sm: 0 2px 8px rgba(45, 106, 79, 0.06);
+  --shadow-md: 0 8px 24px rgba(45, 106, 79, 0.1);
+  --shadow-lg: 0 16px 40px rgba(45, 106, 79, 0.15);
+  --shadow-gold: 0 0 15px rgba(197, 160, 89, 0.25);
   --blur: blur(12px);
   
   /* Transitions */

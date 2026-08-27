@@ -41,21 +41,21 @@ export const HomePage: React.FC<HomePageProps> = ({
 }) => {
   const slides = (heroSlides && heroSlides.length > 0) ? heroSlides.map((s, idx) => ({
     img: s.img || (idx === 0 ? (heroImage || petHero) : idx === 1 ? dogBed : petFood),
-    title: s.title || heroTitle || '樂肉選品\n與毛孩共居的質感生活',
-    desc: s.desc || '與樂樂與肉肉的溫暖共居日常',
-    btnText: s.btnText || bannerBtnText || '探索樂肉選品'
+    title: s.title || heroTitle || '慧聚健康\n守護全家人的健康生活',
+    desc: s.desc || '以科學數據與國際專利為研發核心。我們嚴選高純度深海魚油、游離型葉黃素與百億專利益生菌。',
+    btnText: s.btnText || bannerBtnText || '探索全系列健康選品'
   })) : [
     { 
       img: heroImage || petHero, 
-      title: heroTitle || '樂肉選品\n與毛孩共居的質感生活',
-      desc: '與樂樂與肉肉的溫暖共居日常',
-      btnText: bannerBtnText || '探索樂肉選品'
+      title: heroTitle || '慧聚健康\n守護全家人的健康生活',
+      desc: '以科學數據與國際專利為研發核心。我們嚴選高純度深海魚油、游離型葉黃素與百億專利益生菌。',
+      btnText: bannerBtnText || '探索全系列健康選品'
     },
     { 
       img: dogBed, 
-      title: '職人手工雙針雙線\n義大利植鞣牛皮牽繩',
-      desc: '經年累月的溫潤皮革焦糖色澤',
-      btnText: '查看植鞣選品'
+      title: 'rTG 高純度 85% 深海魚油\n思緒敏捷與心血管護理',
+      desc: '挪威乾淨海域提取，專利軟膠囊無腥味，高吸收率保健首選。',
+      btnText: '查看深海魚油'
     },
     { 
       img: petFood, 
@@ -211,8 +211,8 @@ export const HomePage: React.FC<HomePageProps> = ({
                 {/* Header title */}
                 <div className="section-header" style={{ textAlign: 'center', marginBottom: '3rem' }}>
                   <span className="section-subtitle">Premium Selection</span>
-                  <h2 className="section-title" style={{ fontSize: '2rem', fontFamily: 'var(--font-serif)' }}>毛孩精品系列</h2>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.5rem' }}>依據真實使用體驗，為您嚴選的高品質寵物生活用具</p>
+                  <h2 className="section-title" style={{ fontSize: '2rem', fontFamily: 'var(--font-serif)' }}>生醫與養生精品系列</h2>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.5rem' }}>依據科學實驗數據與國際專利，為您嚴選的高品質保健食品</p>
                 </div>
 
                 {/* Categories Tab Selector */}
@@ -352,9 +352,9 @@ export const HomePage: React.FC<HomePageProps> = ({
                 
                 {/* Header */}
                 <div className="section-header" style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                  <span className="section-subtitle">Instagram @lerou_select</span>
-                  <h2 className="section-title" style={{ fontSize: '2rem', fontFamily: 'var(--font-serif)' }}>生活美學分享牆</h2>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.5rem' }}>樂肉官方 IG 社群即時同步，與我們分享您與毛孩的質感穿搭！</p>
+                  <span className="section-subtitle">Instagram @huiju_health</span>
+                  <h2 className="section-title" style={{ fontSize: '2rem', fontFamily: 'var(--font-serif)' }}>健康美學分享牆</h2>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.5rem' }}>慧聚健康官方 IG 即時同步，與我們分享您的日常健康與靈活活力保養！</p>
                 </div>
 
                 {/* IG feed cards grid */}
@@ -366,7 +366,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                           <img src={appLogo} alt="IG profile avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
                         <div>
-                          <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#333' }}>lerou_select</div>
+                          <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#333' }}>huiju_health</div>
                           <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Instagram 貼文</div>
                         </div>
                       </div>

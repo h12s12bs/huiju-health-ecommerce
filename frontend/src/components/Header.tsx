@@ -149,37 +149,33 @@ export const Header: React.FC<HeaderProps> = ({
                     </a>
                     {item.category === 'apparel' && (
                       <ul className="dropdown-menu">
-                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>外套及背心</a></li>
-                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>裙類及洋裝</a></li>
-                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>褲類及連身褲</a></li>
-                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>單件式上衣</a></li>
-                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>機能服飾</a></li>
+                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>高純度深海魚油</a></li>
+                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>游離型葉黃素</a></li>
+                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>綜合維生素 C+Zinc</a></li>
+                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>心血管健康調理</a></li>
+                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>關鍵骨骼靈活力</a></li>
                       </ul>
                     )}
                     {item.category === 'accessories' && (
                       <ul className="dropdown-menu">
-                        <li><a href="#accessories" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('accessories'); setIsAdminMode(false); }}>帽子</a></li>
-                        <li><a href="#accessories" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('accessories'); setIsAdminMode(false); }}>領巾及圍脖</a></li>
-                        <li><a href="#accessories" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('accessories'); setIsAdminMode(false); }}>玩具</a></li>
+                        <li><a href="#accessories" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('accessories'); setIsAdminMode(false); }}>晶亮舒適防護</a></li>
+                        <li><a href="#accessories" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('accessories'); setIsAdminMode(false); }}>漢方草本調理</a></li>
+                        <li><a href="#accessories" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('accessories'); setIsAdminMode(false); }}>個人健康護理</a></li>
                       </ul>
                     )}
                     {item.category === 'outing' && (
                       <ul className="dropdown-menu">
-                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>水壺</a></li>
-                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>撿便袋包</a></li>
-                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>胸背</a></li>
-                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>牽繩</a></li>
-                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>外出提袋</a></li>
-                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>外出推車</a></li>
-                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>外出碗</a></li>
-                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>汽車坐墊</a></li>
+                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>百億複合益生菌</a></li>
+                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>水溶性膳食纖維</a></li>
+                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>消化酵素保養</a></li>
+                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>敏立清順暢顆粒</a></li>
                       </ul>
                     )}
                     {item.page === 'brands' && (
                       <ul className="dropdown-menu">
-                        <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>樂樂嚴選 (Lè Lè Design)</a></li>
-                        <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>肉肉推薦 (Ròu Ròu Selection)</a></li>
-                        <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>Wild Earth 毛孩機能</a></li>
+                        <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>慧聚生醫 (Huiju Bio-Tech)</a></li>
+                        <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>慧聚研發 (Huiju Labs)</a></li>
+                        <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>HerbaCare 專利草本</a></li>
                       </ul>
                     )}
                   </li>
