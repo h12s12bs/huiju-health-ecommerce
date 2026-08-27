@@ -40,28 +40,28 @@ export const HomePage: React.FC<HomePageProps> = ({
   appLogo
 }) => {
   const slides = (heroSlides && heroSlides.length > 0) ? heroSlides.map((s, idx) => ({
-    img: s.img || (idx === 0 ? (heroImage || petHero) : idx === 1 ? dogBed : petFood),
-    title: s.title || heroTitle || '慧聚健康\n守護全家人的健康生活',
-    desc: s.desc || '以科學數據與國際專利為研發核心。我們嚴選高純度深海魚油、游離型葉黃素與百億專利益生菌。',
-    btnText: s.btnText || bannerBtnText || '探索全系列健康選品'
+    img: s.img || appLogo,
+    title: s.title || heroTitle || '慧聚健康\n帶給每個家庭全方位的健康與照顧',
+    desc: s.desc || '以專業、創新與關懷為核心。我們致力於提供全方位健康照護方案、預防保健與優質生活體驗。',
+    btnText: s.btnText || bannerBtnText || '探索慧聚健康'
   })) : [
     { 
-      img: heroImage || petHero, 
-      title: heroTitle || '慧聚健康\n守護全家人的健康生活',
-      desc: '以科學數據與國際專利為研發核心。我們嚴選高純度深海魚油、游離型葉黃素與百億專利益生菌。',
-      btnText: bannerBtnText || '探索全系列健康選品'
+      img: appLogo, 
+      title: heroTitle || '慧聚健康\n帶給每個家庭全方位的健康與照顧',
+      desc: '以專業、創新與關懷為核心。我們致力於提供全方位健康照護方案、預防保健與優質生活體驗。',
+      btnText: bannerBtnText || '探索慧聚健康'
     },
     { 
-      img: dogBed, 
-      title: 'rTG 高純度 85% 深海魚油\n思緒敏捷與心血管護理',
-      desc: '挪威乾淨海域提取，專利軟膠囊無腥味，高吸收率保健首選。',
-      btnText: '查看深海魚油'
+      img: appLogo, 
+      title: '全方位健康管理與諮詢服務\n打造專屬您的健康生活藍圖',
+      desc: '整合預防保健、健康諮詢與品質生活方案，陪伴您與家人邁向更健康美好的每一天。',
+      btnText: '了解健康服務'
     },
     { 
-      img: petFood, 
-      title: '舒緩分離焦慮\n天然藏食嗅聞益智玩具',
-      desc: '維護消化道機能與調節體質',
-      btnText: '選購紓壓玩具'
+      img: appLogo, 
+      title: '嚴選品質與科學驗證\n帶給每個家庭安心與健康',
+      desc: '從日常健康維護到未來智慧健康照護，慧聚健康為您把關每一個細節。',
+      btnText: '探索全站服務'
     }
   ];
 
@@ -219,8 +219,8 @@ export const HomePage: React.FC<HomePageProps> = ({
                 {/* Header title */}
                 <div className="section-header" style={{ textAlign: 'center', marginBottom: '3rem' }}>
                   <span className="section-subtitle">Premium Selection</span>
-                  <h2 className="section-title" style={{ fontSize: '2rem', fontFamily: 'var(--font-serif)' }}>生醫與養生精品系列</h2>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.5rem' }}>依據科學實驗數據與國際專利，為您嚴選的高品質保健食品</p>
+                  <h2 className="section-title" style={{ fontSize: '2rem', fontFamily: 'var(--font-serif)' }}>慧聚健康全方位服務與商品</h2>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.5rem' }}>為您與家人提供預防保健、專業諮詢與品質生活方案</p>
                 </div>
 
                 {/* Categories Tab Selector */}

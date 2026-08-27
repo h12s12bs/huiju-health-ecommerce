@@ -91,17 +91,17 @@ export interface Customer {
 const DEFAULT_RECIPES = [
   {
     id: 'recipe-1',
-    tag: '營養專欄',
-    title: '高純度深海魚油選購三大黃金原則 🐟✨',
-    desc: '外食族與上班族的日常保健首選！教您如何認明 rTG 高吸收型態、IFOS 五星認證與專利無重金屬純化技術。 #慧聚健康 #深海魚油 #生醫保健 #健康新生活',
-    img: petHero
+    tag: '預防保健指南',
+    title: '全家健康管理：如何建立個人與家庭的日常預防保健習慣 🌿✨',
+    desc: '從日常作息、均衡膳食到定期健康管理，慧聚健康為您解析打造全家健康生活藍圖的四大核心關鍵。 #慧聚健康 #全家健康 #預防保健 #健康生活',
+    img: logoImg
   },
   {
     id: 'recipe-2',
-    tag: '晶亮護理',
-    title: '游離型葉黃素黃金比例 10:2 全解析 👁️🌿',
-    desc: '長時間使用電腦與手機？專利 FloraGLO 游離型葉黃素搭配山桑子與黑大豆皮萃取物，全方位守護您的晶亮舒適感。 #慧聚健康 #游離型葉黃素 #晶亮舒適 #靈活護理',
-    img: dogBed
+    tag: '智慧照護與諮詢',
+    title: '未來健康新趨勢：結合專業諮詢與全方位健康照護平台 💡🤝',
+    desc: '不只是產品，更是陪伴！了解慧聚健康如何結合線上專業諮詢與智慧照顧方案，守護全家人的長期活力與幸福。 #慧聚健康 #健康諮詢 #智慧照護 #全方位服務',
+    img: logoImg
   }
 ];
 
@@ -119,51 +119,51 @@ function App() {
   const [customers, setCustomers] = useState<Customer[]>([]);
 
   // CUSTOM WEB CONFIGS (LOADED FROM system_config DB)
-  const [announcementText, setAnnouncementText] = useState('🌿 全館滿 NT$2000 即享免運！新會員註冊即贈 $100 健康體驗金！ 🌿');
-  const [heroTitle, setHeroTitle] = useState('草本生醫與極致品質兼顧\n守護您與全家人的健康生活');
-  const [heroDesc, setHeroDesc] = useState('以科學數據與國際專利為研發核心。我們嚴選高純度深海魚油、游離型葉黃素與百億專利益生菌。用極緻品質照顧您的全家健康。');
+  const [announcementText, setAnnouncementText] = useState('🌿 慧聚健康 - 帶給每個家庭全方位健康與專業照顧的綜合平台 🌿');
+  const [heroTitle, setHeroTitle] = useState('慧聚健康\n帶給每個家庭全方位的健康與照顧');
+  const [heroDesc, setHeroDesc] = useState('以專業、創新與關懷為核心。我們致力於提供全方位健康照護方案、預防保健與優質生活體驗。');
   const [heroImage, setHeroImage] = useState('');
   const [heroSlides, setHeroSlides] = useState<Array<{ id: string; title: string; desc: string; img: string; btnText: string }>>([
     {
       id: 'slide-1',
-      title: '草本生醫與極致品質兼顧\n守護您與全家人的健康生活',
-      desc: '以科學數據與國際專利為研發核心。我們嚴選高純度深海魚油、游離型葉黃素與百億專利益生菌。',
+      title: '慧聚健康\n帶給每個家庭全方位的健康與照顧',
+      desc: '以專業、創新與關懷為核心。我們致力於提供全方位健康照護方案、預防保健與優質生活體驗。',
       img: '',
-      btnText: '探索全系列健康選品'
+      btnText: '探索慧聚健康'
     },
     {
       id: 'slide-2',
-      title: 'rTG 高純度 85% 深海魚油\n思緒敏捷與心血管護理',
-      desc: '挪威乾淨海域提取，專利軟膠囊無腥味，高吸收率保健首選。',
+      title: '全方位健康管理與諮詢服務\n打造專屬您的健康生活藍圖',
+      desc: '整合預防保健、健康諮詢與品質生活方案，陪伴您與家人邁向更健康美好的每一天。',
       img: '',
-      btnText: '查看深海魚油'
+      btnText: '了解健康服務'
     },
     {
       id: 'slide-3',
-      title: '專利百億複合益生菌\n維持腸道消化道順暢機能',
-      desc: '包埋專利技術，15 支高活性專利益生菌與水溶性膳食纖維。',
+      title: '嚴選品質與科學驗證\n帶給每個家庭安心與健康',
+      desc: '從日常健康維護到未來智慧健康照護，慧聚健康為您把關每一個細節。',
       img: '',
-      btnText: '選購順暢益生菌'
+      btnText: '探索全站服務'
     }
   ]);
   const [blogArticles, setBlogArticles] = useState<any[]>(DEFAULT_RECIPES);
   const [customCategories, setCustomCategories] = useState<Array<{ id: string; name: string }>>([
-    { id: 'apparel', name: '核心保健' },
-    { id: 'accessories', name: '個人護理' },
-    { id: 'outing', name: '順暢消化' },
-    { id: 'toys', name: '紓壓玩具' }
+    { id: 'apparel', name: '預防保健' },
+    { id: 'accessories', name: '健康諮詢' },
+    { id: 'outing', name: '智慧照護' },
+    { id: 'toys', name: '品質生活' }
   ]);
   const [customBrands, setCustomBrands] = useState<Array<{ id: string; name: string }>>([
-    { id: 'brand-huiju-health', name: '慧聚健康 (Huiju Health)' },
-    { id: 'brand-huiju-labs', name: '慧聚研發 (Huiju Labs)' },
-    { id: 'brand-herbacare', name: 'HerbaCare 專利草本' }
+    { id: 'brand-huiju-health', name: '慧聚健康平台 (Huiju Health)' },
+    { id: 'brand-huiju-care', name: '慧聚諮詢與照護 (Huiju Care)' },
+    { id: 'brand-huiju-lab', name: '慧聚研發學院 (Huiju Academy)' }
   ]);
   const [navItems, setNavItems] = useState<Array<{ id: string; name: string; category?: string; page?: string }>>([
     { id: 'nav-new', name: '熱銷推薦', category: 'new', page: 'shop' },
-    { id: 'nav-apparel', name: '核心保健', category: 'apparel', page: 'shop' },
-    { id: 'nav-accessories', name: '個人護理', category: 'accessories', page: 'shop' },
-    { id: 'nav-outing', name: '順暢消化', category: 'outing', page: 'shop' },
-    { id: 'nav-brands', name: '品牌專區', page: 'brands' },
+    { id: 'nav-apparel', name: '預防保健', category: 'apparel', page: 'shop' },
+    { id: 'nav-accessories', name: '健康諮詢', category: 'accessories', page: 'shop' },
+    { id: 'nav-outing', name: '智慧照護', category: 'outing', page: 'shop' },
+    { id: 'nav-brands', name: '服務與品牌', page: 'brands' },
     { id: 'nav-blog', name: '健康專欄', page: 'blog' }
   ]);
   const [bannerBtnText, setBannerBtnText] = useState('探索慧聚健康全系列');
@@ -1245,15 +1245,15 @@ function App() {
                 <span>慧聚健康 <span style={{ whiteSpace: 'nowrap' }}>Huiju Health</span></span>
               </span>
               <p className="footer-desc" style={{ marginTop: '1rem', fontSize: '0.9rem', lineHeight: 1.6, color: 'var(--text-secondary)' }}>
-                專門為您與全家健康打造的慧聚健康。嚴選頂級深海魚油、游離型葉黃素與專利百億益生菌，守護您的全方位健康。
+                慧聚健康致力於打造全方位的健康生活與照護平台。結合預防保健、專業諮詢與品質生活方案，陪伴您與家人邁向更健康美好的未來。
               </p>
 
             <div className="footer-links-col">
-              <h4 className="footer-title" style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1.25rem' }}>健康精品</h4>
+              <h4 className="footer-title" style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1.25rem' }}>平台服務範疇</h4>
               <ul className="footer-links" style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('shop'); setCategory('apparel'); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>天然營養補充</a></li>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('shop'); setCategory('apparel'); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>草本養生調理</a></li>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('shop'); setCategory('accessories'); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>個人健康護理</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('shop'); setCategory('apparel'); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>預防保健方案</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('shop'); setCategory('accessories'); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>健康諮詢與規劃</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); setIsAdminMode(false); setCurrentPage('shop'); setCategory('outing'); }} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>智慧照顧服務</a></li>
               </ul>
             </div>
 

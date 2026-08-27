@@ -149,33 +149,30 @@ export const Header: React.FC<HeaderProps> = ({
                     </a>
                     {item.category === 'apparel' && (
                       <ul className="dropdown-menu">
-                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>高純度深海魚油</a></li>
-                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>游離型葉黃素</a></li>
-                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>綜合維生素 C+Zinc</a></li>
-                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>心血管健康調理</a></li>
-                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>關鍵骨骼靈活力</a></li>
+                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>預防保健日常方案</a></li>
+                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>個人健康檢測與規劃</a></li>
+                        <li><a href="#apparel" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('apparel'); setIsAdminMode(false); }}>全家健康照護組</a></li>
                       </ul>
                     )}
                     {item.category === 'accessories' && (
                       <ul className="dropdown-menu">
-                        <li><a href="#accessories" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('accessories'); setIsAdminMode(false); }}>晶亮舒適防護</a></li>
-                        <li><a href="#accessories" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('accessories'); setIsAdminMode(false); }}>漢方草本調理</a></li>
-                        <li><a href="#accessories" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('accessories'); setIsAdminMode(false); }}>個人健康護理</a></li>
+                        <li><a href="#accessories" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('accessories'); setIsAdminMode(false); }}>線上 1-on-1 健康諮詢</a></li>
+                        <li><a href="#accessories" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('accessories'); setIsAdminMode(false); }}>營養與膳食規劃服務</a></li>
+                        <li><a href="#accessories" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('accessories'); setIsAdminMode(false); }}>客製化健康生活建議</a></li>
                       </ul>
                     )}
                     {item.category === 'outing' && (
                       <ul className="dropdown-menu">
-                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>百億複合益生菌</a></li>
-                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>水溶性膳食纖維</a></li>
-                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>消化酵素保養</a></li>
-                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>敏立清順暢顆粒</a></li>
+                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>智慧健康數據追蹤</a></li>
+                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>家庭健康管理系統</a></li>
+                        <li><a href="#outing" onClick={(e) => { e.preventDefault(); setCurrentPage('shop'); setCategory('outing'); setIsAdminMode(false); }}>銀髮與全家照顧服務</a></li>
                       </ul>
                     )}
                     {item.page === 'brands' && (
                       <ul className="dropdown-menu">
-                        <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>慧聚健康 (Huiju Health)</a></li>
-                        <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>慧聚研發 (Huiju Labs)</a></li>
-                        <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>HerbaCare 專利草本</a></li>
+                        <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>慧聚健康平台 (Huiju Health)</a></li>
+                        <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>慧聚諮詢與照護 (Huiju Care)</a></li>
+                        <li><a href="#brands" onClick={(e) => { e.preventDefault(); setCurrentPage('brands'); setIsAdminMode(false); }}>慧聚研發學院 (Huiju Academy)</a></li>
                       </ul>
                     )}
                   </li>

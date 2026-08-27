@@ -24,32 +24,32 @@ export const BrandsPage: React.FC<BrandsPageProps> = ({
           <span className="section-subtitle">Huiju Health Brands</span>
           <h2 className="section-title">慧聚健康品牌專區</h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginTop: '0.5rem' }}>
-            專注於國際專利原料與科學實驗數據，為您與全家嚴選高品質保健商品。
+            專注於全方位健康生活與照護服務，為您與全家提供預防保健、專業諮詢與品質生活方案。
           </p>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
           {[
             {
-              name: '慧聚健康 (Huiju Health)',
-              desc: '專注於頂級高純度 rTG 深海魚油與專利軟膠囊萃取技術。以挪威優質遠洋鯷魚原料為起點，通過國際 IFOS 五星無重金屬安全認證，提供最純淨的心血管與思緒敏捷滋養。',
-              tag: '頂級魚油 / 國際認證',
+              name: '慧聚健康平台 (Huiju Health)',
+              desc: '整合全家預防保健方案與質感健康生活選品。以科學驗證與品質第一為原則，陪伴全家建立優質健康生活習慣。',
+              tag: '預防保健 / 全家照顧',
               img: petHero,
               brandKey: 'Huiju Health'
             },
             {
-              name: '慧聚研發 (Huiju Labs)',
-              desc: '專為現代螢幕族與上班族打造。結合 FloraGLO 美國專利游離型葉黃素與黃金比例 10:2，並添加山桑子與黑大豆皮萃取物，全方位守護視界晶亮舒適。',
-              tag: '游離葉黃素 / 晶亮護理',
+              name: '慧聚諮詢與照護 (Huiju Care)',
+              desc: '提供專業線上 1-on-1 健康諮詢服務、客製化健康規劃與智慧照顧數據追蹤。陪伴您打造最適合自己的健康生活藍圖。',
+              tag: '專業諮詢 / 智慧照顧',
               img: dogBed,
-              brandKey: 'Huiju Labs'
+              brandKey: 'Huiju Care'
             },
             {
-              name: 'HerbaCare 專利草本',
-              desc: '嚴選 15 支高活性專利益生菌與天然漢方草本，搭配水溶性膳食纖維與包埋專利技術。有效穩定通過胃酸，維護消化道順暢機能與調節體質。',
-              tag: '百億益生菌 / 漢方養生',
+              name: '慧聚研發學院 (Huiju Academy)',
+              desc: '專注於未來健康趨勢研究與衛教推廣。定期分享全方位養生保健、日常防護與靈活活力保養知識。',
+              tag: '健康衛教 / 未來趨勢',
               img: petFood,
-              brandKey: 'HerbaCare'
+              brandKey: 'Huiju Academy'
             }
           ].map((brand, idx) => (
             <div 
