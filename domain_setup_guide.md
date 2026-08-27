@@ -1,4 +1,4 @@
-# 樂肉選品自訂網域與生產環境配置指南 (Domain Setup Guide)
+# 慧聚健康自訂網域與生產環境配置指南 (Domain Setup Guide)
 
 本指南將引導您如何將新購買的網域配置到本電商平台上，涵蓋 **DNS 設定**、**Nginx 反向代理與 SSL 憑證**、**環境變數更新** 以及 **綠界 (ECPay) 金物流回傳設定**。
 
@@ -41,7 +41,7 @@ sudo apt install nginx certbot python3-certbot-nginx -y
 ### 2. 建立 Nginx 設定檔
 建立一個新的網站設定檔：
 ```bash
-sudo nano /etc/nginx/sites-available/lerou
+sudo nano /etc/nginx/sites-available/huiju-health
 ```
 寫入以下配置（將 `example.com` 替換為您的新網域）：
 ```nginx
@@ -51,7 +51,7 @@ server {
 
     # 1. 前端靜態資源 (Vite Build / Dist 目錄)
     location / {
-        root /home/kevin87332000/lerou-custom-ecommerce/frontend/dist;
+        root /home/kevin87332000/huiju-health-ecommerce/frontend/dist;
         index index.html;
         try_files $uri $uri/ /index.html;
     }
@@ -90,7 +90,7 @@ sudo certbot --nginx -d example.com -d www.example.com
 成功配置網域與 SSL 後，需要更新伺服器上的環境變數：
 
 ### 1. 後端環境變數 (`backend/.env`)
-編輯 `/home/kevin87332000/lerou-custom-ecommerce/backend/.env` 並更新如下：
+編輯 `/home/kevin87332000/huiju-health-ecommerce/backend/.env` 並更新如下：
 ```env
 PORT=3001
 # 更新為您綁定的真實 HTTPS 公網網址（綠界付款與物流回傳需要）

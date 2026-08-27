@@ -69,7 +69,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <span 
                   style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500, cursor: 'pointer', textDecoration: 'underline' }}
                   onClick={() => {
-                    if (currentUser?.email === 'admin@lerou.com') {
+                    if (currentUser?.email === 'admin@huiju-health.com') {
                       setIsAdminMode(true);
                       setCurrentPage('admin');
                     } else {
@@ -81,7 +81,7 @@ export const Header: React.FC<HeaderProps> = ({
                 >
                   Hi, {currentUser?.name}
                 </span>
-                {currentUser?.email !== 'admin@lerou.com' && (
+                {currentUser?.email !== 'admin@huiju-health.com' && (
                   <button 
                     className="btn btn-secondary"
                     style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem', border: '1px solid var(--border)', background: 'transparent' }}
@@ -177,7 +177,7 @@ export const Header: React.FC<HeaderProps> = ({
                   </li>
                 );
               })}
-              {isLoggedIn && currentUser?.email === 'admin@lerou.com' && (
+              {isLoggedIn && currentUser?.email === 'admin@huiju-health.com' && (
                 <li>
                   <a 
                     href="#admin" 

@@ -1,7 +1,7 @@
 {
-  "name": "lerou-custom-backend",
+  "name": "huiju-health-backend",
   "version": "1.0.0",
-  "description": "Backend API for Lerou Select E-commerce website",
+  "description": "Backend API for Huiju Health E-commerce website",
   "main": "dist/server.js",
   "type": "module",
   "scripts": {

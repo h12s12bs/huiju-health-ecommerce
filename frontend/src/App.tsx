@@ -386,7 +386,7 @@ function App() {
       })
       .then(_data => {
         setIsLoggedIn(true);
-        setCurrentUser({ name: '管理員', email: 'admin@lerou.com', provider: 'Email' });
+        setCurrentUser({ name: '管理員', email: 'admin@huiju-health.com', provider: 'Email' });
         setIsAdminMode(true);
         setCurrentPage('admin');
       })
@@ -648,7 +648,7 @@ function App() {
       alert('請輸入電子郵件信箱');
       return;
     }
-    if (emailInput === 'admin@lerou.com' || emailInput === 'admin') {
+    if (emailInput === 'admin@huiju-health.com' || emailInput === 'admin') {
       try {
         const res = await fetch(`${BACKEND_URL}/api/auth/login`, {
           method: 'POST',
@@ -659,7 +659,7 @@ function App() {
         if (res.ok && data.token) {
           localStorage.setItem('adminToken', data.token);
           setIsLoggedIn(true);
-          setCurrentUser({ name: '管理員', email: 'admin@lerou.com', provider: 'Email' });
+          setCurrentUser({ name: '管理員', email: 'admin@huiju-health.com', provider: 'Email' });
           setIsAdminMode(true);
           setCurrentPage('admin');
           setIsLoginModalOpen(false);
@@ -1528,7 +1528,7 @@ function App() {
                 <div>
                   <h2 style={{ fontSize: '1.8rem', marginBottom: '1.5rem', color: 'var(--text-primary)', borderBottom: '2px solid var(--border)', paddingBottom: '0.5rem' }}>隱私權保護政策</h2>
                   <div style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.8', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <p>樂肉選品（以下稱本網站）非常重視您的個人隱私權。我們將依據本政策蒐集、處理及利用您的個人資料：</p>
+                    <p>慧聚健康（以下稱本網站）非常重視您的個人隱私權。我們將依據本政策蒐集、處理及利用您的個人資料：</p>
                     <p><strong>1. 資料蒐集目的</strong>：本網站透過 Google、LINE 或 Facebook 社群快速登入系統，蒐集會員的基本聯絡資料（如姓名、電子郵件、電話），僅用於訂單配送、CRM 客戶積點與行銷優惠通知。</p>
                     <p><strong>2. 安全防護</strong>：我們使用業界標準的 SSL 傳輸加密技術，確保您的交易與付款金鑰不被第三方攔截。</p>
                     <p><strong>3. 權利行使</strong>：會員可隨時登入個人後台，申請刪除、修改或查閱其個人隱私資料。</p>
@@ -1773,7 +1773,7 @@ function App() {
                           <input 
                             type="email" 
                             className="form-input" 
-                            placeholder="例如：parent@lerou.com" 
+                            placeholder="例如：member@huiju-health.com" 
                             required
                             value={shippingInfo.email}
                             onChange={(e) => setShippingInfo({ ...shippingInfo, email: e.target.value })}
@@ -1917,7 +1917,7 @@ function App() {
                           <input 
                             type="text" 
                             className="form-input" 
-                            placeholder="輸入折扣碼（例如 LEROU90）" 
+                            placeholder="輸入折扣碼（例如 HUIJU90）" 
                             style={{ flexGrow: 1 }}
                             value={couponCodeInput}
                             onChange={(e) => {
@@ -1939,7 +1939,7 @@ function App() {
                                   setAppliedCoupon({ code, type: 'amount', value: 100 });
                                   setCouponError('');
                                 }
-                              } else if (code === 'LEROU90') {
+                              } else if (code === 'HUIJU90' || code === 'HEALTH90' || code === 'LEROU90') {
                                 setAppliedCoupon({ code, type: 'percent', value: 0.9 });
                                 setCouponError('');
                               } else if (code === 'FREEPING') {

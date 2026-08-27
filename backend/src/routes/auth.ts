@@ -88,13 +88,13 @@ router.post('/send-otp', async (req, res) => {
     if (transporter) {
       // Send real email
       await transporter.sendMail({
-        from: `"樂肉選品 Lè Ròu" <${process.env.SMTP_USER}>`,
+        from: `"慧聚健康 Huiju Health" <${process.env.SMTP_USER}>`,
         to: email,
-        subject: '[Lè Ròu 樂肉選品] 您的信箱二次驗證碼',
-        text: `親愛的會員您好：\n\n您的電子郵件二次驗證碼為：${otp}\n\n此驗證碼於 5 分鐘內有效，請儘速在網頁上完成輸入。\n\n樂肉選品 團隊 敬上`,
+        subject: '[慧聚健康 Huiju Health] 您的信箱二次驗證碼',
+        text: `親愛的會員您好：\n\n您的電子郵件二次驗證碼為：${otp}\n\n此驗證碼於 5 分鐘內有效，請儘速在網頁上完成輸入。\n\n慧聚健康 團隊 敬上`,
         html: `
           <div style="font-family: sans-serif; padding: 2rem; background-color: #f9f9f9; border-radius: 8px;">
-            <h2 style="color: #634b35;">樂肉選品 Lè Ròu - 驗證郵件</h2>
+            <h2 style="color: #2d6a4f;">慧聚健康 Huiju Health - 驗證郵件</h2>
             <p>親愛的會員您好：</p>
             <p>您的電子郵件二次驗證碼為：</p>
             <div style="font-size: 2rem; font-weight: bold; letter-spacing: 4px; padding: 1rem; background: #fff; border: 1px solid #ddd; text-align: center; border-radius: 4px; color: #b19777; margin: 1.5rem 0;">
@@ -408,13 +408,13 @@ router.post('/forgot-password', async (req, res) => {
     const transporter = createMailTransporter();
     if (transporter) {
       await transporter.sendMail({
-        from: `"樂肉選品 Lè Ròu" <${process.env.SMTP_USER}>`,
+        from: `"慧聚健康 Huiju Health" <${process.env.SMTP_USER}>`,
         to: email,
-        subject: '[Lè Ròu 樂肉選品] 重設您的會員密碼',
-        text: `親愛的會員您好：\n\n您收到這封信是因為您（或有人）申請重設樂肉選品的會員密碼。\n\n請點擊以下連結以重設您的密碼：\n\n${resetLink}\n\n此連結於 15 分鐘內有效，如果您並未申請重設密碼，請忽略此郵件。\n\n樂肉選品 團隊 敬上`,
+        subject: '[慧聚健康 Huiju Health] 重設您的會員密碼',
+        text: `親愛的會員您好：\n\n您收到這封信是因為您（或有人）申請重設慧聚健康的會員密碼。\n\n請點擊以下連結以重設您的密碼：\n\n${resetLink}\n\n此連結於 15 分鐘內有效，如果您並未申請重設密碼，請忽略此郵件。\n\n慧聚健康 團隊 敬上`,
         html: `
           <div style="font-family: sans-serif; padding: 2rem; background-color: #f9f9f9; border-radius: 8px;">
-            <h2 style="color: #634b35;">樂肉選品 Lè Ròu - 重設密碼</h2>
+            <h2 style="color: #2d6a4f;">慧聚健康 Huiju Health - 重設密碼</h2>
             <p>親愛的會員您好：</p>
             <p>我們收到了您重設會員密碼的請求。請點擊下方的按鈕來重設密碼：</p>
             <div style="text-align: center; margin: 2rem 0;">

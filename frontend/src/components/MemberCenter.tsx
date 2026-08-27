@@ -63,8 +63,8 @@ export const MemberCenter: React.FC<MemberCenterProps> = ({
 
   // Predefined coupons list
   const coupons = [
-    { code: 'LEROU100', description: '滿 NT$ 1,000 元現折 NT$ 100 元', terms: '單筆結帳金額需滿千元方得使用。' },
-    { code: 'MEOW90', description: '全店商品結帳打 9 折', terms: '適用於全館所有選物商品，無使用金額限制。' },
+    { code: 'HUIJU100', description: '滿 NT$ 1,000 元現折 NT$ 100 元', terms: '單筆結帳金額需滿千元方得使用。' },
+    { code: 'HEALTH90', description: '全店商品結帳打 9 折', terms: '適用於全館所有保健商品，無使用金額限制。' },
     { code: 'FREESHIP', description: '全店消費享免運費', terms: '適用於店到店及宅配，享單筆訂單免運優惠。' }
   ];
 

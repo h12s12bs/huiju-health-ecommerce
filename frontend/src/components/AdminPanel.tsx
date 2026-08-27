@@ -1415,7 +1415,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                               <input 
                                 type="text" 
                                 className="form-input" 
-                                placeholder="例如: 樂肉門市"
+                                placeholder="例如: 慧聚健康門市"
                                 value={orderForm.cvsStoreName}
                                 onChange={(e) => setOrderForm({ ...orderForm, cvsStoreName: e.target.value })}
                               />
@@ -2847,8 +2847,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       if (sectionKey === 'instagram') {
                         return (
                           <div key="instagram-prev" style={{ padding: '12px', borderTop: '1px solid #eee', background: 'var(--bg-secondary)', textAlign: 'center' }}>
-                            <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)', display: 'block' }}>Instagram @lerou_select</span>
-                            <strong style={{ fontSize: '0.75rem', display: 'block', margin: '2px 0 6px' }}>📸 生活美學分享牆 (已連線)</strong>
+                            <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)', display: 'block' }}>Instagram @huiju_health</span>
+                            <strong style={{ fontSize: '0.75rem', display: 'block', margin: '2px 0 6px' }}>📸 慧聚健康分享牆 (已連線)</strong>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
                               {[1, 2, 3].map(i => (
                                 <div key={i} style={{ borderRadius: '4px', overflow: 'hidden', height: '40px', border: '1px solid #eee' }}>
@@ -2869,7 +2869,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               {/* Instagram Feed Sync Integration Dashboard */}
               <div className="woo-editor-box" style={{ padding: '1.5rem' }}>
                 <div className="woo-editor-box-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border)', paddingBottom: '0.75rem' }}>
-                  <span>樂肉官方 Instagram 貼文同步模組</span>
+                  <span>慧聚健康官方 Instagram 貼文同步模組</span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                     <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--success)' }}></span>
                     <span style={{ fontSize: '0.8rem', color: 'var(--success)', fontWeight: 600 }}>API Webhook 已連接</span>
@@ -2877,7 +2877,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 </div>
 
                 <div style={{ background: 'var(--bg-secondary)', padding: '1rem', borderRadius: '8px', marginTop: '1rem', fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                  <p><strong>💡 運作說明：</strong>本網站已直接串連您的官方 Instagram 專頁。當您在 IG 發布新貼文且標記 <code>#樂肉選品</code> 時，前台的「部落格分享」頁面會經由 Graph API 即時自動同步抓取貼文圖文與發布時間，無需在此重複打字撰寫。</p>
+                  <p><strong>💡 運作說明：</strong>本網站已直接串連您的官方 Instagram 專頁。當您在 IG 發布新貼文且標記 <code>#慧聚健康</code> 時，前台的「部落格分享」頁面會經由 Graph API 即時自動同步抓取貼文圖文與發布時間，無需在此重複打字撰寫。</p>
                   <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                     <button 
                       type="button"
@@ -2903,7 +2903,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                           <img src={appLogo} alt="IG profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
                         <div>
-                          <div style={{ fontSize: '0.8rem', fontWeight: 'bold' }}>lerou_select</div>
+                          <div style={{ fontSize: '0.8rem', fontWeight: 'bold' }}>huiju_health</div>
                           <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Instagram 自動同步</div>
                         </div>
                       </div>
@@ -3198,7 +3198,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     />
                   </div>
                   <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.75rem' }}>
-                    ℹ️ 當您在 IG 發布新貼文且標記 <code>#樂肉選品</code> 時，前台的「生活美學分享牆」會經由 Graph API 即時自動同步抓取。
+                    ℹ️ 當您在 IG 發布新貼文且標記 <code>#慧聚健康</code> 時，前台的「生活美學分享牆」會經由 Graph API 即時自動同步抓取。
                   </p>
                 </div>
 

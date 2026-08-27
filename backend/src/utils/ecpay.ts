@@ -169,7 +169,7 @@ export function generateLogisticsCvsParams(order: any, goodsName: string): Recor
     LogisticsSubType: order.logisticsSubType, // UNIMART, FAMI, etc.
     GoodsAmount: Math.round(order.total).toString(),
     GoodsName: goodsName.slice(0, 50),
-    SenderName: '樂肉選品',
+    SenderName: '慧聚健康',
     SenderCellPhone: '0912345678', // Test sender phone
     ReceiverName: order.shippingName.slice(0, 10),
     ReceiverCellPhone: order.shippingPhone,
@@ -203,7 +203,7 @@ export function generateLogisticsHomeParams(order: any, goodsName: string): Reco
     LogisticsSubType: 'TCAT', // TCAT=黑貓, POST=郵局
     GoodsAmount: Math.round(order.total).toString(),
     GoodsName: goodsName.slice(0, 50),
-    SenderName: '樂肉選品',
+    SenderName: '慧聚健康',
     SenderCellPhone: '0912345678',
     SenderZipCode: '106',
     SenderAddress: '台北市大安區敦化南路二段100號',

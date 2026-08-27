@@ -23,6 +23,6 @@ RUN mkdir -p /app/data
 EXPOSE 5000
 
 ENV PORT=5000
-ENV DATABASE_URL=./data/lerou_ecommerce.db
+ENV DATABASE_URL=postgres://postgres:postgrespassword@postgres:5432/huiju_ecommerce
 
 CMD ["node", "dist/server.js"]
